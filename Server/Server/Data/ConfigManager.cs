@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 public class ServerConfig
 {
     public string dataPath;
+    public string dbConnectionString;
 }
 
 public class ConfigManager
