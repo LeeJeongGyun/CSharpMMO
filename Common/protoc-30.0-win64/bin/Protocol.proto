@@ -1,0 +1,110 @@
+syntax = "proto3";
+package Protocol;
+
+enum PacketID {
+	S2C_ENTER_ROOM = 0;
+	S2C_LEAVE_ROOM = 1;
+	S2C_SPAWN = 2;
+	S2C_DESPAWN = 3;
+	C2S_MOVE = 4;
+	S2C_MOVE = 5;
+	C2S_SKILL = 6;
+	S2C_SKILL = 7;
+	S2C_UPDATE_HP = 8;
+	S2C_DIE = 9;
+}
+
+enum ObjectType {
+	Default = 0;
+	Player = 1;
+	Monster = 2;
+	Projectile = 3;
+}
+
+enum ObjectState {
+	Idle = 0;
+	Moving = 1;
+	Skill = 2;
+	Dead = 3;
+}
+
+enum MoveDir {
+	Up = 0;
+	Down = 1;
+	Left = 2;
+	Right = 3;
+}
+enum SkillType {
+	None = 0;
+	Scythe = 1;
+	Bullet = 2;
+}
+
+message S2C_EnterRoom {
+	ObjectInfo objectInfo = 1;
+}
+
+message S2C_LeaveRoom {
+}
+
+message S2C_Spawn {
+	repeated ObjectInfo objectInfos = 1;
+}
+
+message S2C_Despawn {
+	int32 objectId = 1;
+}
+
+message C2S_Move {
+	PositionInfo posInfo = 1;
+}
+
+message S2C_Move {
+	int32 objectId = 1;
+	PositionInfo posInfo = 2;
+}
+
+message C2S_Skill {
+	SkillInfo skillInfo = 1;
+}
+
+message S2C_Skill {
+	int32 objectId = 1;
+	SkillInfo skillInfo = 2;
+}
+
+message S2C_UpdateHp {
+	int32 objectId = 1;
+	int32 hp = 2;
+}
+
+message S2C_Die {
+	int32 objectId = 1;
+}
+
+message ObjectInfo {
+	int32 objectId = 1;
+	ObjectType objectType = 2;
+	PositionInfo posInfo = 3;
+	StatInfo statInfo = 4;
+}
+
+message PositionInfo {
+	ObjectState state = 1;
+	MoveDir dir = 2;
+	int32 posX = 3;
+	int32 posY = 4;
+}
+
+message StatInfo {
+	int32 level = 1;
+	int32 hp = 2;
+	int32 maxHp = 3;
+	int32 attack = 4;
+	float speed = 5;
+	int32 totalExp = 6;
+}
+
+message SkillInfo {
+	int32 skillId = 1;
+}

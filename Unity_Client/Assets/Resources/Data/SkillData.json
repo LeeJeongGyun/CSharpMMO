@@ -1,0 +1,23 @@
+{
+  "skills": [
+    {
+      "id": "1",
+      "name": "낫 공격",
+      "cooldown": "0.5",
+      "damage": "10",
+      "skillType": "Scythe"
+    },
+    {
+      "id": "2",
+      "name": "총 공격",
+      "cooldown": "0.5",
+      "damage": "5",
+      "skillType": "Bullet",
+      "projectile": {
+        "name": "총알",
+        "speed": "10.0",
+        "range": "10"
+      }
+    }
+  ]
+}
