@@ -33,5 +33,9 @@ public class AppDbContext : DbContext
         builder.Entity<PlayerDb>()
             .HasIndex(player => player.PlayerName)
             .IsUnique();
+
+        // Entity 클래스가 아닌 클래스를 Db Table에 매핑
+        builder.Entity<PlayerDb>()
+            .OwnsOne(p => p.StatInfo);
     }
 }

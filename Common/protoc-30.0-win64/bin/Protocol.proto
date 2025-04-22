@@ -15,6 +15,9 @@ enum PacketID {
 	S2C_CONNECTED = 10;
 	C2S_LOGIN = 11;
 	S2C_LOGIN = 12;
+	C2S_ENTER_ROOM = 13;
+	C2S_CREATE_PLAYER = 14;
+	S2C_CREATE_PLAYER = 15;
 }
 
 enum ObjectType {
@@ -41,6 +44,12 @@ enum SkillType {
 	None = 0;
 	Scythe = 1;
 	Bullet = 2;
+}
+
+enum PlayerServerState {
+	PLAYER_STATE_LOGIN = 0;
+	PLAYER_STATE_LOBBY = 1;
+	PLAYER_STATE_GAME = 2;
 }
 
 message S2C_EnterRoom {
@@ -95,12 +104,31 @@ message C2S_Login {
 
 message S2C_Login {
 	int32 loginOk = 1;
+	repeated LobbyPlayerInfo playerInfos = 2;
 }
+
+message C2S_EnterRoom {
+	string name = 1;
+}
+
+message C2S_CreatePlayer {
+	string name = 1;
+}
+
+message S2C_CreatePlayer {
+	LobbyPlayerInfo playerInfo = 1;
+}
+
 message ObjectInfo {
 	int32 objectId = 1;
 	ObjectType objectType = 2;
 	PositionInfo posInfo = 3;
 	StatInfo statInfo = 4;
+}
+
+message LobbyPlayerInfo {
+	string name = 1;
+	StatInfo statInfo = 2;
 }
 
 message PositionInfo {

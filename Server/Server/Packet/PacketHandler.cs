@@ -15,24 +15,37 @@ internal class PacketHandler
         if (loginPacket == null)
             return;
 
-        // TODO 보안 체크 필요..
+        ClientSession clientSession = session as ClientSession;
+        if (clientSession == null)
+            return;
 
-        Console.WriteLine($"UniqueId: {loginPacket.UniqueId}");
+        clientSession.HandleLogin(loginPacket);
+    }
 
-        // TODO 문제가 존재
-        using (AppDbContext db = new AppDbContext())
-        {
-            AccountDb? account = db.Accounts.Where(account => account.AccountName == loginPacket.UniqueId).FirstOrDefault();
-            if (account == null)
-            {
-                db.Accounts.Add(new AccountDb() { AccountName = loginPacket.UniqueId });
-                db.SaveChanges();
-            }
-        }
+    public static void C2S_EnterRoomHandler(PacketSession session, IMessage packet)
+    {
+        C2S_EnterRoom enterPacket = packet as C2S_EnterRoom;
+        if (enterPacket == null)
+            return;
 
-        S2C_Login loginPacketRes = new S2C_Login();
-        loginPacketRes.LoginOk = 1;
-        (session as ClientSession)?.Send(loginPacketRes);
+        ClientSession clientSession = session as ClientSession;
+        if (clientSession == null)
+            return;
+
+        clientSession.HandleEnterRoom(enterPacket);
+    }
+
+    public static void C2S_CreatePlayerHandler(PacketSession session, IMessage packet)
+    {
+        C2S_CreatePlayer createPlayerPacket = packet as C2S_CreatePlayer;
+        if (createPlayerPacket == null)
+            return;
+
+        ClientSession clientSession = session as ClientSession;
+        if (clientSession == null)
+            return;
+
+        clientSession.HandleCreatePlayer(createPlayerPacket);
     }
 
     public static void C2S_MoveHandler(PacketSession session, IMessage packet)

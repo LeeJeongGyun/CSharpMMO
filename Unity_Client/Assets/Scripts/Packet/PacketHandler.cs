@@ -6,25 +6,6 @@ using UnityEngine;
 
 public class PacketHandler
 {
-    public static void S2C_ConnectedHandler(PacketSession session, IMessage message)
-    {
-        Debug.Log($"S2C_ConntectedHandler");
-
-        C2S_Login loginPacket = new C2S_Login();
-        loginPacket.UniqueId = SystemInfo.deviceUniqueIdentifier;
-        Managers.Network.Send(loginPacket);
-    }
-
-    public static void S2C_LoginHandler(PacketSession session, IMessage message)
-    {
-        S2C_Login loginPacket = message as S2C_Login;
-        if (loginPacket == null)
-            return;
-
-        Debug.Log($"S2C_LoginHandler");
-        Debug.Log($"Login Response: {loginPacket.LoginOk}");
-    }
-
     public static void S2C_EnterRoomHandler(PacketSession session, IMessage message)
     {
         S2C_EnterRoom enterRoomPacket = message as S2C_EnterRoom;
@@ -110,5 +91,55 @@ public class PacketHandler
             if (cc != null)
                 cc.OnDead();
         }
+    }
+
+    public static void S2C_ConnectedHandler(PacketSession session, IMessage message)
+    {
+        Debug.Log($"S2C_ConntectedHandler");
+
+        C2S_Login loginPacket = new C2S_Login();
+        loginPacket.UniqueId = SystemInfo.deviceUniqueIdentifier;
+        Managers.Network.Send(loginPacket);
+    }
+
+    public static void S2C_LoginHandler(PacketSession session, IMessage message)
+    {
+        S2C_Login loginPacket = message as S2C_Login;
+        if (loginPacket == null)
+            return;
+
+        // TODO: 로비 UI에서 캐릭터 선택할 수 있도록 유도
+
+        Debug.Log($"S2C_LoginHandler");
+        Debug.Log($"Login Response: {loginPacket.LoginOk}");
+        if (loginPacket.PlayerInfos.Count == 0)
+        {
+            // 플레이어 생성
+            C2S_CreatePlayer createPlayerPacket = new C2S_CreatePlayer();
+            createPlayerPacket.Name = $"Player_{Random.Range(0, 10000).ToString("0000")}";
+            Managers.Network.Send(createPlayerPacket);
+        }
+        else
+        {
+            // 게임 입장
+            C2S_EnterRoom enterPacket = new C2S_EnterRoom();
+            enterPacket.Name = loginPacket.PlayerInfos[0].Name;
+            Managers.Network.Send(enterPacket);
+        }
+    }
+
+    public static void S2C_CreatePlayerHandler(PacketSession session, IMessage message)
+    {
+        S2C_CreatePlayer createPlayer = message as S2C_CreatePlayer;
+        LobbyPlayerInfo playerInfo = createPlayer.PlayerInfo;
+        if (playerInfo == null)
+        {
+            Debug.Log("S2C_CreatePlayerHandler PlayerInfo Null");
+            return;
+        }
+
+        C2S_EnterRoom enterRoomPacket = new C2S_EnterRoom();
+        enterRoomPacket.Name = playerInfo.Name;
+        Managers.Network.Send(enterRoomPacket);
     }
 }

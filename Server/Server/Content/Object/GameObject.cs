@@ -58,6 +58,8 @@ public class GameObject
         set => PosInfo.Dir = value;
     }
 
+    public string Name { get; set; }
+
     // Bullet와 같은 Projectile은 Map에 등록을 하지 않아 충돌되지 않음
     public virtual void OnDamaged(GameObject attacker, int damaged)
     {

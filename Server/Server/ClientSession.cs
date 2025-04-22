@@ -9,13 +9,13 @@ using Server.Content.Object;
 using Server.Data;
 using ServerCore;
 
-public class ClientSession : PacketSession
+public partial class ClientSession : PacketSession
 {
     public static int connectCount = 0;
     public static int disConnectCount = 0;
     public static int recvCount = 0;
     public static int sessionId = 1;
-
+    public PlayerServerState PlayerServerState { get; private set; } = PlayerServerState.PlayerStateLogin;
     public int SessionId { get; set; }
     public int ObjectId { get; private set; } = 0;
 
@@ -42,33 +42,8 @@ public class ClientSession : PacketSession
         SessionId = Interlocked.Increment(ref sessionId);
         Console.WriteLine($"[SERVER] ClientSession Connected: {endPoint}");
 
-        {
-            S2C_Connected connectedPacket = new S2C_Connected();
-            Send(connectedPacket);
-        }
-
-        // TODO 로비에서 캐릭터 선택할 때
-        // 1. Player 생성
-        Player player = ObjectManager.Instance.AddObject<Player>();
-        {
-            player.State = ObjectState.Idle;
-            player.Dir = MoveDir.Down;
-            player.PosInfo.PosX = 0;
-            player.PosInfo.PosY = 0;
-
-            StatInfo? statData = null;
-            if (DataManager.Stats.TryGetValue(1, out statData)) // TODO: 현재는 level 1 가정
-                player.StatInfo.MergeFrom(statData);
-
-            player.Session = this;
-        }
-
-        ObjectId = player.ObjectId;
-
-        // TODO 입장 요청 패킷이 올 때 실행
-        // 2. Room에 Player 입장
-        GameRoom? gameRoom = RoomManager.Instance.FindRoom(1);
-        gameRoom?.Push(gameRoom.EnterRoom, player);
+        S2C_Connected connectedPacket = new S2C_Connected();
+        Send(connectedPacket);
     }
 
     public override void OnDisconnected(EndPoint? endPoint)

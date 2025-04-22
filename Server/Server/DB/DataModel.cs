@@ -1,6 +1,7 @@
 ﻿namespace Server.DB;
 
 using System.ComponentModel.DataAnnotations.Schema;
+using Protocol;
 
 [Table("Account")]
 public class AccountDb
@@ -18,5 +19,8 @@ public class PlayerDb
 
     public string PlayerName { get; set; }
 
+    public int AccountDbId { get; set; }
     public AccountDb Account { get; set; }
+
+    public StatInfo StatInfo { get; set; }
 }
