@@ -50,7 +50,9 @@ internal class ClientPacketManager
 		_packetHandlerMap.Add((ushort)PacketID.S2CMove, PacketHandler.S2C_MoveHandler);_makePacketMap.Add((ushort)PacketID.S2CSkill, MakePacket<S2C_Skill>);
 		_packetHandlerMap.Add((ushort)PacketID.S2CSkill, PacketHandler.S2C_SkillHandler);_makePacketMap.Add((ushort)PacketID.S2CUpdateHp, MakePacket<S2C_UpdateHp>);
 		_packetHandlerMap.Add((ushort)PacketID.S2CUpdateHp, PacketHandler.S2C_UpdateHpHandler);_makePacketMap.Add((ushort)PacketID.S2CDie, MakePacket<S2C_Die>);
-		_packetHandlerMap.Add((ushort)PacketID.S2CDie, PacketHandler.S2C_DieHandler);
+		_packetHandlerMap.Add((ushort)PacketID.S2CDie, PacketHandler.S2C_DieHandler);_makePacketMap.Add((ushort)PacketID.S2CConnected, MakePacket<S2C_Connected>);
+		_packetHandlerMap.Add((ushort)PacketID.S2CConnected, PacketHandler.S2C_ConnectedHandler);_makePacketMap.Add((ushort)PacketID.S2CLogin, MakePacket<S2C_Login>);
+		_packetHandlerMap.Add((ushort)PacketID.S2CLogin, PacketHandler.S2C_LoginHandler);
     }
 
     // Unity에서만 사용

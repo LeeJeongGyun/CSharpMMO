@@ -40,12 +40,6 @@ internal class Program
         // Logger 등록
         GlobalLogger.WriteLog += log => Console.WriteLine(log);
 
-        using (AppDbContext db = new AppDbContext())
-        {
-            db.Accounts.Add(new AccountDb() { AccountName = "TestAccount" });
-            db.SaveChanges();
-        }
-
         // 1번 GameRoom 생성
         GameRoom room = RoomManager.Instance.AddRoom();
         TickRoom(room, 50);

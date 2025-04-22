@@ -24,18 +24,11 @@ public class GameRoom : JobSerializer
         _map.LoadMap(1);
 
         GenerateMonsterAI(1);
-        TestTimer();
     }
 
     public int Id { get; init; }
 
     public Map Map => _map;
-
-    public void TestTimer()
-    {
-        Console.WriteLine("TestTimer");
-        PushAfter(TestTimer, 1000);
-    }
 
     // 주기적으로 호출 필요
     public void Update()
