@@ -12,6 +12,9 @@ enum PacketID {
 	S2C_SKILL = 7;
 	S2C_UPDATE_HP = 8;
 	S2C_DIE = 9;
+	S2C_CONNECTED = 10;
+	C2S_LOGIN = 11;
+	S2C_LOGIN = 12;
 }
 
 enum ObjectType {
@@ -82,6 +85,17 @@ message S2C_Die {
 	int32 objectId = 1;
 }
 
+message S2C_Connected {
+
+}
+
+message C2S_Login {
+	string uniqueId = 1;
+}
+
+message S2C_Login {
+	int32 loginOk = 1;
+}
 message ObjectInfo {
 	int32 objectId = 1;
 	ObjectType objectType = 2;

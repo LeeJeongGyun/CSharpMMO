@@ -42,6 +42,12 @@ public class ClientSession : PacketSession
         SessionId = Interlocked.Increment(ref sessionId);
         Console.WriteLine($"[SERVER] ClientSession Connected: {endPoint}");
 
+        {
+            S2C_Connected connectedPacket = new S2C_Connected();
+            Send(connectedPacket);
+        }
+
+        // TODO 로비에서 캐릭터 선택할 때
         // 1. Player 생성
         Player player = ObjectManager.Instance.AddObject<Player>();
         {
@@ -59,6 +65,7 @@ public class ClientSession : PacketSession
 
         ObjectId = player.ObjectId;
 
+        // TODO 입장 요청 패킷이 올 때 실행
         // 2. Room에 Player 입장
         GameRoom? gameRoom = RoomManager.Instance.FindRoom(1);
         gameRoom?.Push(gameRoom.EnterRoom, player);

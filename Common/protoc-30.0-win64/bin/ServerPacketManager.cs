@@ -44,7 +44,8 @@ internal class ServerPacketManager
     {
         _makePacketMap.Add((ushort)PacketID.C2SMove, MakePacket<C2S_Move>);
 		_packetHandlerMap.Add((ushort)PacketID.C2SMove, PacketHandler.C2S_MoveHandler);_makePacketMap.Add((ushort)PacketID.C2SSkill, MakePacket<C2S_Skill>);
-		_packetHandlerMap.Add((ushort)PacketID.C2SSkill, PacketHandler.C2S_SkillHandler);
+		_packetHandlerMap.Add((ushort)PacketID.C2SSkill, PacketHandler.C2S_SkillHandler);_makePacketMap.Add((ushort)PacketID.C2SLogin, MakePacket<C2S_Login>);
+		_packetHandlerMap.Add((ushort)PacketID.C2SLogin, PacketHandler.C2S_LoginHandler);
     }
 
     // Unity에서만 사용

@@ -6,6 +6,25 @@ using UnityEngine;
 
 public class PacketHandler
 {
+    public static void S2C_ConnectedHandler(PacketSession session, IMessage message)
+    {
+        Debug.Log($"S2C_ConntectedHandler");
+
+        C2S_Login loginPacket = new C2S_Login();
+        loginPacket.UniqueId = SystemInfo.deviceUniqueIdentifier;
+        Managers.Network.Send(loginPacket);
+    }
+
+    public static void S2C_LoginHandler(PacketSession session, IMessage message)
+    {
+        S2C_Login loginPacket = message as S2C_Login;
+        if (loginPacket == null)
+            return;
+
+        Debug.Log($"S2C_LoginHandler");
+        Debug.Log($"Login Response: {loginPacket.LoginOk}");
+    }
+
     public static void S2C_EnterRoomHandler(PacketSession session, IMessage message)
     {
         S2C_EnterRoom enterRoomPacket = message as S2C_EnterRoom;
