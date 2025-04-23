@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Google.Protobuf;
 using Protocol;
@@ -43,17 +43,17 @@ internal class ClientPacketManager
     public void Register()
     {
         _makePacketMap.Add((ushort)PacketID.S2CEnterRoom, MakePacket<S2C_EnterRoom>);
-		_packetHandlerMap.Add((ushort)PacketID.S2CEnterRoom, PacketHandler.S2C_EnterRoomHandler);_makePacketMap.Add((ushort)PacketID.S2CLeaveRoom, MakePacket<S2C_LeaveRoom>);
-		_packetHandlerMap.Add((ushort)PacketID.S2CLeaveRoom, PacketHandler.S2C_LeaveRoomHandler);_makePacketMap.Add((ushort)PacketID.S2CSpawn, MakePacket<S2C_Spawn>);
-		_packetHandlerMap.Add((ushort)PacketID.S2CSpawn, PacketHandler.S2C_SpawnHandler);_makePacketMap.Add((ushort)PacketID.S2CDespawn, MakePacket<S2C_Despawn>);
-		_packetHandlerMap.Add((ushort)PacketID.S2CDespawn, PacketHandler.S2C_DespawnHandler);_makePacketMap.Add((ushort)PacketID.S2CMove, MakePacket<S2C_Move>);
-		_packetHandlerMap.Add((ushort)PacketID.S2CMove, PacketHandler.S2C_MoveHandler);_makePacketMap.Add((ushort)PacketID.S2CSkill, MakePacket<S2C_Skill>);
-		_packetHandlerMap.Add((ushort)PacketID.S2CSkill, PacketHandler.S2C_SkillHandler);_makePacketMap.Add((ushort)PacketID.S2CUpdateHp, MakePacket<S2C_UpdateHp>);
-		_packetHandlerMap.Add((ushort)PacketID.S2CUpdateHp, PacketHandler.S2C_UpdateHpHandler);_makePacketMap.Add((ushort)PacketID.S2CDie, MakePacket<S2C_Die>);
-		_packetHandlerMap.Add((ushort)PacketID.S2CDie, PacketHandler.S2C_DieHandler);_makePacketMap.Add((ushort)PacketID.S2CConnected, MakePacket<S2C_Connected>);
-		_packetHandlerMap.Add((ushort)PacketID.S2CConnected, PacketHandler.S2C_ConnectedHandler);_makePacketMap.Add((ushort)PacketID.S2CLogin, MakePacket<S2C_Login>);
-		_packetHandlerMap.Add((ushort)PacketID.S2CLogin, PacketHandler.S2C_LoginHandler);_makePacketMap.Add((ushort)PacketID.S2CCreatePlayer, MakePacket<S2C_CreatePlayer>);
-		_packetHandlerMap.Add((ushort)PacketID.S2CCreatePlayer, PacketHandler.S2C_CreatePlayerHandler);
+        _packetHandlerMap.Add((ushort)PacketID.S2CEnterRoom, PacketHandler.S2C_EnterRoomHandler); _makePacketMap.Add((ushort)PacketID.S2CLeaveRoom, MakePacket<S2C_LeaveRoom>);
+        _packetHandlerMap.Add((ushort)PacketID.S2CLeaveRoom, PacketHandler.S2C_LeaveRoomHandler); _makePacketMap.Add((ushort)PacketID.S2CSpawn, MakePacket<S2C_Spawn>);
+        _packetHandlerMap.Add((ushort)PacketID.S2CSpawn, PacketHandler.S2C_SpawnHandler); _makePacketMap.Add((ushort)PacketID.S2CDespawn, MakePacket<S2C_Despawn>);
+        _packetHandlerMap.Add((ushort)PacketID.S2CDespawn, PacketHandler.S2C_DespawnHandler); _makePacketMap.Add((ushort)PacketID.S2CMove, MakePacket<S2C_Move>);
+        _packetHandlerMap.Add((ushort)PacketID.S2CMove, PacketHandler.S2C_MoveHandler); _makePacketMap.Add((ushort)PacketID.S2CSkill, MakePacket<S2C_Skill>);
+        _packetHandlerMap.Add((ushort)PacketID.S2CSkill, PacketHandler.S2C_SkillHandler); _makePacketMap.Add((ushort)PacketID.S2CUpdateHp, MakePacket<S2C_UpdateHp>);
+        _packetHandlerMap.Add((ushort)PacketID.S2CUpdateHp, PacketHandler.S2C_UpdateHpHandler); _makePacketMap.Add((ushort)PacketID.S2CDie, MakePacket<S2C_Die>);
+        _packetHandlerMap.Add((ushort)PacketID.S2CDie, PacketHandler.S2C_DieHandler); _makePacketMap.Add((ushort)PacketID.S2CConnected, MakePacket<S2C_Connected>);
+        _packetHandlerMap.Add((ushort)PacketID.S2CConnected, PacketHandler.S2C_ConnectedHandler); _makePacketMap.Add((ushort)PacketID.S2CLogin, MakePacket<S2C_Login>);
+        _packetHandlerMap.Add((ushort)PacketID.S2CLogin, PacketHandler.S2C_LoginHandler); _makePacketMap.Add((ushort)PacketID.S2CCreatePlayer, MakePacket<S2C_CreatePlayer>);
+        _packetHandlerMap.Add((ushort)PacketID.S2CCreatePlayer, PacketHandler.S2C_CreatePlayerHandler);
     }
 
     // Unity에서만 사용

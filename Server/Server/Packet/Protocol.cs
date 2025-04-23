@@ -44,28 +44,28 @@ namespace Protocol {
             "eWVySW5mbyKXAQoKT2JqZWN0SW5mbxIQCghvYmplY3RJZBgBIAEoBRIoCgpv",
             "YmplY3RUeXBlGAIgASgOMhQuUHJvdG9jb2wuT2JqZWN0VHlwZRInCgdwb3NJ",
             "bmZvGAMgASgLMhYuUHJvdG9jb2wuUG9zaXRpb25JbmZvEiQKCHN0YXRJbmZv",
-            "GAQgASgLMhIuUHJvdG9jb2wuU3RhdEluZm8iRQoPTG9iYnlQbGF5ZXJJbmZv",
-            "EgwKBG5hbWUYASABKAkSJAoIc3RhdEluZm8YAiABKAsyEi5Qcm90b2NvbC5T",
-            "dGF0SW5mbyJwCgxQb3NpdGlvbkluZm8SJAoFc3RhdGUYASABKA4yFS5Qcm90",
-            "b2NvbC5PYmplY3RTdGF0ZRIeCgNkaXIYAiABKA4yES5Qcm90b2NvbC5Nb3Zl",
-            "RGlyEgwKBHBvc1gYAyABKAUSDAoEcG9zWRgEIAEoBSJlCghTdGF0SW5mbxIN",
-            "CgVsZXZlbBgBIAEoBRIKCgJocBgCIAEoBRINCgVtYXhIcBgDIAEoBRIOCgZh",
-            "dHRhY2sYBCABKAUSDQoFc3BlZWQYBSABKAISEAoIdG90YWxFeHAYBiABKAUi",
-            "HAoJU2tpbGxJbmZvEg8KB3NraWxsSWQYASABKAUqnwIKCFBhY2tldElEEhIK",
-            "DlMyQ19FTlRFUl9ST09NEAASEgoOUzJDX0xFQVZFX1JPT00QARINCglTMkNf",
-            "U1BBV04QAhIPCgtTMkNfREVTUEFXThADEgwKCEMyU19NT1ZFEAQSDAoIUzJD",
-            "X01PVkUQBRINCglDMlNfU0tJTEwQBhINCglTMkNfU0tJTEwQBxIRCg1TMkNf",
-            "VVBEQVRFX0hQEAgSCwoHUzJDX0RJRRAJEhEKDVMyQ19DT05ORUNURUQQChIN",
-            "CglDMlNfTE9HSU4QCxINCglTMkNfTE9HSU4QDBISCg5DMlNfRU5URVJfUk9P",
-            "TRANEhUKEUMyU19DUkVBVEVfUExBWUVSEA4SFQoRUzJDX0NSRUFURV9QTEFZ",
-            "RVIQDypCCgpPYmplY3RUeXBlEgsKB0RlZmF1bHQQABIKCgZQbGF5ZXIQARIL",
-            "CgdNb25zdGVyEAISDgoKUHJvamVjdGlsZRADKjgKC09iamVjdFN0YXRlEggK",
-            "BElkbGUQABIKCgZNb3ZpbmcQARIJCgVTa2lsbBACEggKBERlYWQQAyowCgdN",
-            "b3ZlRGlyEgYKAlVwEAASCAoERG93bhABEggKBExlZnQQAhIJCgVSaWdodBAD",
-            "Ki0KCVNraWxsVHlwZRIICgROb25lEAASCgoGU2N5dGhlEAESCgoGQnVsbGV0",
-            "EAIqWgoRUGxheWVyU2VydmVyU3RhdGUSFgoSUExBWUVSX1NUQVRFX0xPR0lO",
-            "EAASFgoSUExBWUVSX1NUQVRFX0xPQkJZEAESFQoRUExBWUVSX1NUQVRFX0dB",
-            "TUUQAmIGcHJvdG8z"));
+            "GAQgASgLMhIuUHJvdG9jb2wuU3RhdEluZm8iWQoPTG9iYnlQbGF5ZXJJbmZv",
+            "EhIKCnBsYXllckRiSWQYASABKAUSDAoEbmFtZRgCIAEoCRIkCghzdGF0SW5m",
+            "bxgDIAEoCzISLlByb3RvY29sLlN0YXRJbmZvInAKDFBvc2l0aW9uSW5mbxIk",
+            "CgVzdGF0ZRgBIAEoDjIVLlByb3RvY29sLk9iamVjdFN0YXRlEh4KA2RpchgC",
+            "IAEoDjIRLlByb3RvY29sLk1vdmVEaXISDAoEcG9zWBgDIAEoBRIMCgRwb3NZ",
+            "GAQgASgFImUKCFN0YXRJbmZvEg0KBWxldmVsGAEgASgFEgoKAmhwGAIgASgF",
+            "Eg0KBW1heEhwGAMgASgFEg4KBmF0dGFjaxgEIAEoBRINCgVzcGVlZBgFIAEo",
+            "AhIQCgh0b3RhbEV4cBgGIAEoBSIcCglTa2lsbEluZm8SDwoHc2tpbGxJZBgB",
+            "IAEoBSqfAgoIUGFja2V0SUQSEgoOUzJDX0VOVEVSX1JPT00QABISCg5TMkNf",
+            "TEVBVkVfUk9PTRABEg0KCVMyQ19TUEFXThACEg8KC1MyQ19ERVNQQVdOEAMS",
+            "DAoIQzJTX01PVkUQBBIMCghTMkNfTU9WRRAFEg0KCUMyU19TS0lMTBAGEg0K",
+            "CVMyQ19TS0lMTBAHEhEKDVMyQ19VUERBVEVfSFAQCBILCgdTMkNfRElFEAkS",
+            "EQoNUzJDX0NPTk5FQ1RFRBAKEg0KCUMyU19MT0dJThALEg0KCVMyQ19MT0dJ",
+            "ThAMEhIKDkMyU19FTlRFUl9ST09NEA0SFQoRQzJTX0NSRUFURV9QTEFZRVIQ",
+            "DhIVChFTMkNfQ1JFQVRFX1BMQVlFUhAPKkIKCk9iamVjdFR5cGUSCwoHRGVm",
+            "YXVsdBAAEgoKBlBsYXllchABEgsKB01vbnN0ZXIQAhIOCgpQcm9qZWN0aWxl",
+            "EAMqOAoLT2JqZWN0U3RhdGUSCAoESWRsZRAAEgoKBk1vdmluZxABEgkKBVNr",
+            "aWxsEAISCAoERGVhZBADKjAKB01vdmVEaXISBgoCVXAQABIICgREb3duEAES",
+            "CAoETGVmdBACEgkKBVJpZ2h0EAMqLQoJU2tpbGxUeXBlEggKBE5vbmUQABIK",
+            "CgZTY3l0aGUQARIKCgZCdWxsZXQQAipaChFQbGF5ZXJTZXJ2ZXJTdGF0ZRIW",
+            "ChJQTEFZRVJfU1RBVEVfTE9HSU4QABIWChJQTEFZRVJfU1RBVEVfTE9CQlkQ",
+            "ARIVChFQTEFZRVJfU1RBVEVfR0FNRRACYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Protocol.PacketID), typeof(global::Protocol.ObjectType), typeof(global::Protocol.ObjectState), typeof(global::Protocol.MoveDir), typeof(global::Protocol.SkillType), typeof(global::Protocol.PlayerServerState), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -86,7 +86,7 @@ namespace Protocol {
             new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.C2S_CreatePlayer), global::Protocol.C2S_CreatePlayer.Parser, new[]{ "Name" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.S2C_CreatePlayer), global::Protocol.S2C_CreatePlayer.Parser, new[]{ "PlayerInfo" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.ObjectInfo), global::Protocol.ObjectInfo.Parser, new[]{ "ObjectId", "ObjectType", "PosInfo", "StatInfo" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.LobbyPlayerInfo), global::Protocol.LobbyPlayerInfo.Parser, new[]{ "Name", "StatInfo" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.LobbyPlayerInfo), global::Protocol.LobbyPlayerInfo.Parser, new[]{ "PlayerDbId", "Name", "StatInfo" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.PositionInfo), global::Protocol.PositionInfo.Parser, new[]{ "State", "Dir", "PosX", "PosY" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.StatInfo), global::Protocol.StatInfo.Parser, new[]{ "Level", "Hp", "MaxHp", "Attack", "Speed", "TotalExp" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Protocol.SkillInfo), global::Protocol.SkillInfo.Parser, new[]{ "SkillId" }, null, null, null, null)
@@ -3787,6 +3787,7 @@ namespace Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public LobbyPlayerInfo(LobbyPlayerInfo other) : this() {
+      playerDbId_ = other.playerDbId_;
       name_ = other.name_;
       statInfo_ = other.statInfo_ != null ? other.statInfo_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -3798,8 +3799,20 @@ namespace Protocol {
       return new LobbyPlayerInfo(this);
     }
 
+    /// <summary>Field number for the "playerDbId" field.</summary>
+    public const int PlayerDbIdFieldNumber = 1;
+    private int playerDbId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int PlayerDbId {
+      get { return playerDbId_; }
+      set {
+        playerDbId_ = value;
+      }
+    }
+
     /// <summary>Field number for the "name" field.</summary>
-    public const int NameFieldNumber = 1;
+    public const int NameFieldNumber = 2;
     private string name_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -3811,7 +3824,7 @@ namespace Protocol {
     }
 
     /// <summary>Field number for the "statInfo" field.</summary>
-    public const int StatInfoFieldNumber = 2;
+    public const int StatInfoFieldNumber = 3;
     private global::Protocol.StatInfo statInfo_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -3837,6 +3850,7 @@ namespace Protocol {
       if (ReferenceEquals(other, this)) {
         return true;
       }
+      if (PlayerDbId != other.PlayerDbId) return false;
       if (Name != other.Name) return false;
       if (!object.Equals(StatInfo, other.StatInfo)) return false;
       return Equals(_unknownFields, other._unknownFields);
@@ -3846,6 +3860,7 @@ namespace Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
+      if (PlayerDbId != 0) hash ^= PlayerDbId.GetHashCode();
       if (Name.Length != 0) hash ^= Name.GetHashCode();
       if (statInfo_ != null) hash ^= StatInfo.GetHashCode();
       if (_unknownFields != null) {
@@ -3866,12 +3881,16 @@ namespace Protocol {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
+      if (PlayerDbId != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(PlayerDbId);
+      }
       if (Name.Length != 0) {
-        output.WriteRawTag(10);
+        output.WriteRawTag(18);
         output.WriteString(Name);
       }
       if (statInfo_ != null) {
-        output.WriteRawTag(18);
+        output.WriteRawTag(26);
         output.WriteMessage(StatInfo);
       }
       if (_unknownFields != null) {
@@ -3884,12 +3903,16 @@ namespace Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (PlayerDbId != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(PlayerDbId);
+      }
       if (Name.Length != 0) {
-        output.WriteRawTag(10);
+        output.WriteRawTag(18);
         output.WriteString(Name);
       }
       if (statInfo_ != null) {
-        output.WriteRawTag(18);
+        output.WriteRawTag(26);
         output.WriteMessage(StatInfo);
       }
       if (_unknownFields != null) {
@@ -3902,6 +3925,9 @@ namespace Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
+      if (PlayerDbId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(PlayerDbId);
+      }
       if (Name.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
       }
@@ -3919,6 +3945,9 @@ namespace Protocol {
     public void MergeFrom(LobbyPlayerInfo other) {
       if (other == null) {
         return;
+      }
+      if (other.PlayerDbId != 0) {
+        PlayerDbId = other.PlayerDbId;
       }
       if (other.Name.Length != 0) {
         Name = other.Name;
@@ -3948,11 +3977,15 @@ namespace Protocol {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
-          case 10: {
-            Name = input.ReadString();
+          case 8: {
+            PlayerDbId = input.ReadInt32();
             break;
           }
           case 18: {
+            Name = input.ReadString();
+            break;
+          }
+          case 26: {
             if (statInfo_ == null) {
               StatInfo = new global::Protocol.StatInfo();
             }
@@ -3978,11 +4011,15 @@ namespace Protocol {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
-          case 10: {
-            Name = input.ReadString();
+          case 8: {
+            PlayerDbId = input.ReadInt32();
             break;
           }
           case 18: {
+            Name = input.ReadString();
+            break;
+          }
+          case 26: {
             if (statInfo_ == null) {
               StatInfo = new global::Protocol.StatInfo();
             }
