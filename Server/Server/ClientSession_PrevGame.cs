@@ -7,6 +7,7 @@ using Server.Content;
 using Server.Content.Object;
 using Server.Data;
 using Server.DB;
+using Server.Utils;
 using ServerCore;
 
 public partial class ClientSession : PacketSession
@@ -34,7 +35,7 @@ public partial class ClientSession : PacketSession
             {
                 account = new AccountDb() { AccountName = loginPacket.UniqueId };
                 db.Accounts.Add(account);
-                db.SaveChanges(); // TODO : 동시에 서로 다른 유저에서 같은 UniqueId온다면.. Exception 처리 필요
+                bool success = db.SaveChangesEx(); // TODO : 동시에 서로 다른 유저에서 같은 UniqueId온다면.. Exception 처리 필요
             }
             else
             {
@@ -42,6 +43,7 @@ public partial class ClientSession : PacketSession
                 {
                     LobbyPlayerInfo lobbyPlayerInfo = new LobbyPlayerInfo()
                     {
+                        PlayerDbId = playerDb.PlayerDbId,
                         Name = playerDb.PlayerName,
                         StatInfo = new StatInfo()
                         {
@@ -83,6 +85,7 @@ public partial class ClientSession : PacketSession
         // 1. Player 생성
         Player player = Server.Content.ObjectManager.Instance.AddObject<Player>();
         {
+            player.PlayerDbId = playerInfo.PlayerDbId;
             player.State = ObjectState.Idle;
             player.Dir = MoveDir.Down;
             player.PosInfo.PosX = 0;
@@ -135,9 +138,10 @@ public partial class ClientSession : PacketSession
             };
 
             db.Players.Add(newPlayer);
-            db.SaveChanges(); // TODO Exception Handling, 이름 중복이라면..
+            db.SaveChangesEx(); // TODO Exception Handling, 이름 중복이라면..
 
             LobbyPlayerInfo playerInfo = new LobbyPlayerInfo() { StatInfo = new StatInfo() };
+            playerInfo.PlayerDbId = newPlayer.PlayerDbId;
             playerInfo.Name = newPlayer.PlayerName;
             playerInfo.StatInfo.MergeFrom(newPlayer.StatInfo);
 

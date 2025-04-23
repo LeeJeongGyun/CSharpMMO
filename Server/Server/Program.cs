@@ -57,9 +57,7 @@ internal class Program
         Console.WriteLine("Listening...");
         while (true)
         {
-            //room.Flush();
-            //room.Push(room.Update);
-            Thread.Sleep(1000);
+            DBTransaction.Instance.Flush();
         }
     }
 }

@@ -123,7 +123,7 @@ public class PacketHandler
         {
             // 게임 입장
             C2S_EnterRoom enterRoomPacket = new C2S_EnterRoom();
-            enterPacket.Name = loginPacket.PlayerInfos[0].Name;
+            enterRoomPacket.Name = loginPacket.PlayerInfos[0].Name;
             Managers.Network.Send(enterRoomPacket);
         }
     }

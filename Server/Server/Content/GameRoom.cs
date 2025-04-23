@@ -135,6 +135,7 @@ public class GameRoom : JobSerializer
             player.Session.Send(leavePacket);
 
             // Player 관련 정보 제거
+            player.OnLeaveRoom(); // DB 정보 갱신
             player.Room = null;
             _players.Remove(objectId);
             _map.RemoveObject(player);

@@ -127,8 +127,9 @@ message ObjectInfo {
 }
 
 message LobbyPlayerInfo {
-	string name = 1;
-	StatInfo statInfo = 2;
+	int32 playerDbId = 1;
+	string name = 2;
+	StatInfo statInfo = 3;
 }
 
 message PositionInfo {
