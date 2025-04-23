@@ -142,4 +142,16 @@ public class PacketHandler
         enterRoomPacket.Name = playerInfo.Name;
         Managers.Network.Send(enterRoomPacket);
     }
+
+    public static void S2C_ItemListHandler(PacketSession session, IMessage message)
+    {
+        S2C_ItemList itemListPacket = message as S2C_ItemList;
+        if (itemListPacket == null)
+            return;
+
+        foreach (var item in itemListPacket.ItemInfos)
+        {
+            Debug.Log($"Id: {item.ItemDbId}, TemplateId: {item.TemplateId}, Count: {item.Count}");
+        }
+    }
 }

@@ -18,6 +18,7 @@ enum PacketID {
 	C2S_ENTER_ROOM = 13;
 	C2S_CREATE_PLAYER = 14;
 	S2C_CREATE_PLAYER = 15;
+	S2C_ITEM_LIST = 16;
 }
 
 enum ObjectType {
@@ -50,6 +51,30 @@ enum PlayerServerState {
 	PLAYER_STATE_LOGIN = 0;
 	PLAYER_STATE_LOBBY = 1;
 	PLAYER_STATE_GAME = 2;
+}
+
+enum ItemType {
+	ITEM_TYPE_NONE = 0;
+	ITEM_TYPE_WEAPON = 1;
+	ITEM_TYPE_ARMOR = 2;
+	ITEM_TYPE_CONSUMABLE = 3;
+}
+
+enum WeaponType {
+	WEAPON_TYPE_NONE = 0;
+	WEAPON_TYPE_SCYTHE = 1;
+	WEAPON_TYPE_GUN = 2;
+}
+
+enum ArmorType {
+	ARMOR_TYPE_NONE = 0;
+	ARMOR_TYPE_HELMET = 1;
+	ARMOR_TYPE_ARMOR = 2;
+}
+
+enum ConsumableType {
+	CONSUMABLE_TYPE_NONE = 0;
+	CONSUMABLE_TYPE_POTION = 1;
 }
 
 message S2C_EnterRoom {
@@ -119,11 +144,16 @@ message S2C_CreatePlayer {
 	LobbyPlayerInfo playerInfo = 1;
 }
 
+message S2C_ItemList {
+	repeated ItemInfo itemInfos = 1;
+}
+
 message ObjectInfo {
 	int32 objectId = 1;
-	ObjectType objectType = 2;
-	PositionInfo posInfo = 3;
-	StatInfo statInfo = 4;
+	string name = 2;
+	ObjectType objectType = 3;
+	PositionInfo posInfo = 4;
+	StatInfo statInfo = 5;
 }
 
 message LobbyPlayerInfo {
@@ -150,4 +180,11 @@ message StatInfo {
 
 message SkillInfo {
 	int32 skillId = 1;
+}
+
+message ItemInfo {
+	int32 itemDbId = 1;
+	int32 templateId = 2;
+	int32 count = 3;
+	int32 slot = 4;
 }

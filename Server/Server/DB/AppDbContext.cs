@@ -17,6 +17,8 @@ public class AppDbContext : DbContext
 
     public DbSet<PlayerDb> Players { get; set; }
 
+    public DbSet<ItemDb> Items { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
         options

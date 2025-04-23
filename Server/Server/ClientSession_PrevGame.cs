@@ -93,6 +93,29 @@ public partial class ClientSession : PacketSession
             player.Name = playerInfo.Name;
             player.StatInfo.MergeFrom(playerInfo.StatInfo);
             player.Session = this;
+
+            {
+                // Item 로딩
+                S2C_ItemList itemListPacket = new S2C_ItemList();
+                using (AppDbContext db = new AppDbContext())
+                {
+                    var items = db.Items.Where(item => item.OwnerDbId == player.PlayerDbId).ToList();
+                    foreach (var itemDb in items)
+                    {
+                        Item? item = Item.MakeItem(itemDb);
+                        if (item != null)
+                        {
+                            player.Inven.Add(item);
+
+                            ItemInfo itemInfo = new ItemInfo();
+                            itemInfo.MergeFrom(item.Info);
+                            itemListPacket.ItemInfos.Add(itemInfo);
+                        }
+                    }
+
+                    Send(itemListPacket);
+                }
+            }
         }
 
         ObjectId = player.ObjectId;

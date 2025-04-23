@@ -13,6 +13,8 @@ public class Player : GameObject
         ObjectType = ObjectType.Player;
     }
 
+    public Inventory Inven { get; private set; } = new Inventory();
+
     public int PlayerDbId { get; set; }
 
     public override void OnDamaged(GameObject attacker, int damaged)
