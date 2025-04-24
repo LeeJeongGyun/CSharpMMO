@@ -65,6 +65,7 @@ crashlytics-build.properties
 # Exclude import file
 Assets/COPY SPRIGHT/
 Assets/COPY SPRIGHT.meta
+Assets/ThirdParty/
 
 # Exclude Test Builds File
 TestBuilds/
