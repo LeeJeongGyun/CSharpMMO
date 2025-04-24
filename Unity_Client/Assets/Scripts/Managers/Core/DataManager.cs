@@ -12,21 +12,19 @@ public interface ILoader<Key, Value>
 
 public class DataManager
 {
-    public Dictionary<int, Data.Stat> Stats { get; private set; } = new Dictionary<int, Data.Stat>();
     public Dictionary<int, Data.Skill> Skills { get; private set; } = new Dictionary<int, Data.Skill>();
+
+    public Dictionary<int, Data.ItemData> Items { get; private set; } = new Dictionary<int, Data.ItemData>();
 
     public void Init()
     {
-        Stats = LoadJson<Data.StatData, int, Data.Stat>("StatData").MakeDict();
         Skills = LoadJson<Data.SkillData, int, Data.Skill>("SkillData").MakeDict();
+        Items = LoadJson<Data.ItemLoader, int, Data.ItemData>("ItemData").MakeDict();
     }
 
     private Loader LoadJson<Loader, Key, Value>(string path) where Loader : ILoader<Key, Value>
     {
         TextAsset textAsset = Managers.Resource.Load<TextAsset>($"Data/{path}");
         return JsonConvert.DeserializeObject<Loader>(textAsset.text);
-        // JsonUnity Enum 스트링 파싱 불가
-        // Newtonsoft로 변경
-        //return JsonUtility.FromJson<Loader>(textAsset.text);
     }
 }

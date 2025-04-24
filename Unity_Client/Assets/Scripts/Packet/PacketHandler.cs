@@ -149,9 +149,19 @@ public class PacketHandler
         if (itemListPacket == null)
             return;
 
-        foreach (var item in itemListPacket.ItemInfos)
+        UI_GameScene gameSceneUI = Managers.UI.SceneUI as UI_GameScene;
+        UI_Inventory invenUI = gameSceneUI.InvenUI;
+        Managers.Inven.Clear();
+
+        // 메모리에 아이템 적용
+        foreach (var itemInfo in itemListPacket.ItemInfos)
         {
-            Debug.Log($"Id: {item.ItemDbId}, TemplateId: {item.TemplateId}, Count: {item.Count}");
+            Item item = Item.MakeItem(itemInfo);
+            Managers.Inven.Add(item);
         }
+
+        // UI에 표시
+        invenUI.gameObject.SetActive(true);
+        invenUI.RefreshUI();
     }
 }

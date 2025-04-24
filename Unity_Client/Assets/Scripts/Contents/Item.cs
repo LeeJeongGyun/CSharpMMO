@@ -1,9 +1,9 @@
-﻿namespace Server.Content;
-
+﻿using System.Collections;
+using System.Collections.Generic;
+using Data;
 using Protocol;
-using Server.Data;
-using Server.DB;
-using static System.Net.Mime.MediaTypeNames;
+using UnityEngine;
+using static UnityEditor.Progress;
 
 public class Item
 {
@@ -42,34 +42,34 @@ public class Item
     // 겹쳐지냐..
     public bool Stackable { get; protected set; }
 
-    public static Item? MakeItem(ItemDb itemDb)
+    public static Item MakeItem(ItemInfo itemInfo)
     {
-        DataManager.Items.TryGetValue(itemDb.TemplateId, out var item);
+        Managers.Data.Items.TryGetValue(itemInfo.TemplateId, out var item);
         if (item == null)
             return null;
 
-        Item? newItem = null;
+        Item newItem = null;
         switch (item.itemType)
         {
         case ItemType.Weapon:
-            newItem = new Weapon(itemDb.TemplateId);
+            newItem = new Weapon(itemInfo.TemplateId);
             break;
 
         case ItemType.Armor:
-            newItem = new Armor(itemDb.TemplateId);
+            newItem = new Armor(itemInfo.TemplateId);
             break;
 
         case ItemType.Consumable:
-            newItem = new Consumable(itemDb.TemplateId);
+            newItem = new Consumable(itemInfo.TemplateId);
             break;
 
         default:
             return null;
         }
 
-        newItem.ItemDbId = itemDb.ItemDbId;
-        newItem.Slot = itemDb.Slot;
-        newItem.Count = itemDb.Count;
+        newItem.ItemDbId = itemInfo.ItemDbId;
+        newItem.Count = itemInfo.Count;
+        newItem.Slot = itemInfo.Slot;
         return newItem;
     }
 }
@@ -87,7 +87,7 @@ public class Weapon : Item
 
     private void Init(int templateId)
     {
-        DataManager.Items.TryGetValue(templateId, out var itemData);
+        Managers.Data.Items.TryGetValue(templateId, out var itemData);
         if (itemData != null)
         {
             WeaponData weapon = itemData as WeaponData;
@@ -116,7 +116,7 @@ public class Armor : Item
 
     private void Init(int templateId)
     {
-        DataManager.Items.TryGetValue(templateId, out var itemData);
+        Managers.Data.Items.TryGetValue(templateId, out var itemData);
         if (itemData != null)
         {
             ArmorData armor = itemData as ArmorData;
@@ -145,7 +145,7 @@ public class Consumable : Item
 
     private void Init(int templateId)
     {
-        DataManager.Items.TryGetValue(templateId, out var itemData);
+        Managers.Data.Items.TryGetValue(templateId, out var itemData);
         if (itemData != null)
         {
             ConsumableData consumable = itemData as ConsumableData;

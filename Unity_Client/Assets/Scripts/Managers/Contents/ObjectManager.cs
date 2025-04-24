@@ -63,7 +63,7 @@ public class ObjectManager
 
     public GameObject FindObject(int objectId)
     {
-        GameObject? go;
+        GameObject go;
         _objects.TryGetValue(objectId, out go);
         return go;
     }

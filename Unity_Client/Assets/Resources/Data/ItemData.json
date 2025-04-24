@@ -4,13 +4,15 @@
       "id": "1",
       "name": "기본 낫",
       "weaponType": "Scythe",
-      "damage": "10"
+      "damage": "10",
+      "iconPath": "Textures/Item/scythe"
     },
     {
       "id": "2",
       "name": "기본 총",
       "weaponType": "Gun",
-      "damage": "7"
+      "damage": "7",
+      "iconPath": "Textures/Item/gun"
     }
   ],
   "armors": [
@@ -18,13 +20,15 @@
       "id": "10",
       "name": "기본 갑옷",
       "armorType": "Armor",
-      "defence": "15"
+      "defence": "15",
+      "iconPath": "Textures/Item/armor"
     },
     {
       "id": "11",
       "name": "기본 헬멧",
       "armorType": "Helmet",
-      "defence": "7"
+      "defence": "7",
+      "iconPath": "Textures/Item/helmets"
     }
   ],
   "consumables": [
@@ -32,7 +36,8 @@
       "id": "20",
       "name": "HP 물약",
       "consumableType": "Potion",
-      "maxCount": "10"
+      "maxCount": "10",
+      "iconPath": "Textures/Item/potion"
     }
   ]
 }

@@ -40,6 +40,42 @@ internal class Program
         // Logger 등록
         GlobalLogger.WriteLog += log => Console.WriteLine(log);
 
+        // TEST CODE, Player Db Item 생성
+        using (AppDbContext db = new AppDbContext())
+        {
+            PlayerDb? playerDb = db.Players.FirstOrDefault();
+            if (playerDb != null)
+            {
+                List<ItemDb> items = new List<ItemDb>()
+                {
+                    new ItemDb()
+                    {
+                        TemplateId = 1,
+                        Owner = playerDb,
+                        Count = 1,
+                        Slot = 1
+                    },
+                    new ItemDb()
+                    {
+                        TemplateId = 10,
+                        Owner = playerDb,
+                        Count = 1,
+                        Slot = 2
+                    },
+                    new ItemDb()
+                    {
+                        TemplateId = 20,
+                        Owner = playerDb,
+                        Count = 1,
+                        Slot = 3
+                    }
+                };
+
+                db.Items.AddRange(items);
+                db.SaveChanges();
+            }
+        }
+
         // 1번 GameRoom 생성
         GameRoom room = RoomManager.Instance.AddRoom();
         TickRoom(room, 50);
