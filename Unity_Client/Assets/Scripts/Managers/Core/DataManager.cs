@@ -15,11 +15,13 @@ public class DataManager
     public Dictionary<int, Data.Skill> Skills { get; private set; } = new Dictionary<int, Data.Skill>();
 
     public Dictionary<int, Data.ItemData> Items { get; private set; } = new Dictionary<int, Data.ItemData>();
+    public Dictionary<int, Data.MonsterData> Monsters { get; private set; } = new Dictionary<int, Data.MonsterData>();
 
     public void Init()
     {
         Skills = LoadJson<Data.SkillData, int, Data.Skill>("SkillData").MakeDict();
         Items = LoadJson<Data.ItemLoader, int, Data.ItemData>("ItemData").MakeDict();
+        Monsters = LoadJson<Data.MonsterLoader, int, Data.MonsterData>("MonsterData").MakeDict();
     }
 
     private Loader LoadJson<Loader, Key, Value>(string path) where Loader : ILoader<Key, Value>

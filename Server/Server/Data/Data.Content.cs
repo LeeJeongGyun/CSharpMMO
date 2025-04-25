@@ -117,3 +117,36 @@ public class ItemLoader : ILoader<int, ItemData>
 }
 
 #endregion Item
+
+#region Monster
+
+public class RewardData
+{
+    public int probability; // 100분율
+    public int itemId;
+    public int count;
+}
+
+public class MonsterData
+{
+    public int id;
+    public string name;
+    public StatInfo statInfo;
+    public List<RewardData> rewards;
+}
+
+public class MonsterLoader : ILoader<int, MonsterData>
+{
+    public List<MonsterData> monsters = new List<MonsterData>();
+
+    public Dictionary<int, MonsterData> MakeDictionary()
+    {
+        Dictionary<int, MonsterData> ret = new Dictionary<int, MonsterData>();
+        foreach (MonsterData monster in monsters)
+            ret.Add(monster.id, monster);
+
+        return ret;
+    }
+}
+
+#endregion Monster

@@ -109,4 +109,32 @@ namespace Data
     }
 
     #endregion Item
+
+    #region Monster
+
+    [Serializable]
+    public class MonsterData
+    {
+        public int id;
+        public string name;
+        public StatInfo statInfo;
+        public string prefabPath;
+    }
+
+    [Serializable]
+    public class MonsterLoader : ILoader<int, MonsterData>
+    {
+        public List<MonsterData> monsters = new List<MonsterData>();
+
+        public Dictionary<int, MonsterData> MakeDict()
+        {
+            Dictionary<int, MonsterData> ret = new Dictionary<int, MonsterData>();
+            foreach (MonsterData monster in monsters)
+                ret.Add(monster.id, monster);
+
+            return ret;
+        }
+    }
+
+    #endregion Monster
 }
