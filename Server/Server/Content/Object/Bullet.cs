@@ -42,4 +42,9 @@ public class Bullet : Projectile
         long speedToTick = (long)(1000 / SkillData.projectile.speed);
         _moveTick = Environment.TickCount64 + speedToTick;
     }
+
+    public override GameObject GetOwner()
+    {
+        return Owner;
+    }
 }

@@ -73,7 +73,7 @@ public class GameObject
 
         if (StatInfo.Hp == 0)
         {
-            OnDead();
+            OnDead(attacker);
             return;
         }
 
@@ -101,7 +101,12 @@ public class GameObject
             return MoveDir.Right;
     }
 
-    protected virtual void OnDead()
+    public virtual GameObject GetOwner()
+    {
+        return this;
+    }
+
+    protected virtual void OnDead(GameObject attacker)
     {
         S2C_Die diePacket = new S2C_Die();
         diePacket.ObjectId = ObjectId;

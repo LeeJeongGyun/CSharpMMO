@@ -263,6 +263,7 @@ public class GameRoom : JobSerializer
         for (int i = 0; i < monsterCount; ++i)
         {
             Monster monster = ObjectManager.Instance.AddObject<Monster>();
+            monster.Init(1);
             monster.State = ObjectState.Idle;
             monster.Dir = MoveDir.Down;
             monster.CellPos = new Vector2Int(0, 0);

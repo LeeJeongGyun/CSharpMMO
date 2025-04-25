@@ -19,6 +19,7 @@ enum PacketID {
 	C2S_CREATE_PLAYER = 14;
 	S2C_CREATE_PLAYER = 15;
 	S2C_ITEM_LIST = 16;
+	S2C_UPDATE_ITEM = 17;
 }
 
 enum ObjectType {
@@ -146,6 +147,10 @@ message S2C_CreatePlayer {
 
 message S2C_ItemList {
 	repeated ItemInfo itemInfos = 1;
+}
+
+message S2C_UpdateItem {
+	ItemInfo itemInfo = 1;
 }
 
 message ObjectInfo {

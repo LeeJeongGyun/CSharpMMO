@@ -24,6 +24,7 @@ public class MyPlayerController : PlayerController
     protected override void UpdateController()
     {
         base.UpdateController();
+        InputUIKey();
 
         switch (State)
         {
@@ -184,6 +185,25 @@ public class MyPlayerController : PlayerController
         else
         {
             _skillInput = false;
+        }
+    }
+
+    private void InputUIKey()
+    {
+        if (Input.GetKey(KeyCode.I))
+        {
+            UI_GameScene gameSceneUI = Managers.UI.SceneUI as UI_GameScene;
+            if (gameSceneUI != null)
+            {
+                UI_Inventory uiInven = gameSceneUI.InvenUI;
+                if (uiInven.gameObject.activeSelf)
+                    uiInven.gameObject.SetActive(false);
+                else
+                {
+                    uiInven.RefreshUI();
+                    uiInven.gameObject.SetActive(true);
+                }
+            }
         }
     }
 

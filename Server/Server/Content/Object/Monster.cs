@@ -21,6 +21,21 @@ public class Monster : GameObject
         ObjectType = ObjectType.Monster;
     }
 
+    public int TemplateId { get; private set; }
+
+    public void Init(int templateId)
+    {
+        TemplateId = templateId;
+
+        DataManager.Monsters.TryGetValue(templateId, out MonsterData? monsterData);
+        if (monsterData == null)
+            return;
+
+        StatInfo.MergeFrom(monsterData.statInfo);
+        StatInfo.Hp = monsterData.statInfo.MaxHp;
+        State = ObjectState.Idle;
+    }
+
     // FSM 적용
     public void Update()
     {
@@ -170,6 +185,39 @@ public class Monster : GameObject
 
     protected virtual void UpdateDead()
     { }
+
+    protected override void OnDead(GameObject attacker)
+    {
+        base.OnDead(attacker);
+
+        if (attacker.GetOwner() is not Player)
+            return;
+
+        RewardData? reward = GetRandomRewardData();
+        if (reward == null)
+            return;
+
+        DBTransaction.SaveMonsterReward((Player)attacker, Room, reward);
+    }
+
+    private RewardData? GetRandomRewardData()
+    {
+        DataManager.Monsters.TryGetValue(TemplateId, out MonsterData? monsterData);
+        if (monsterData == null)
+            return null;
+
+        int randNum = new Random().Next(0, 101);
+        int sum = 0;
+
+        foreach (var reward in monsterData.rewards)
+        {
+            sum += reward.probability;
+            if (randNum <= sum)
+                return reward;
+        }
+
+        return null;
+    }
 
     private void SendBroadcastMovePacket()
     {
