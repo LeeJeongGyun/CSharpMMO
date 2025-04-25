@@ -21,10 +21,15 @@ public class UI_Inventory : UI_Base
             UI_Inventory_Item invenItem = go.GetOrAddComponent<UI_Inventory_Item>();
             Items.Add(invenItem);
         }
+
+        RefreshUI();
     }
 
     public void RefreshUI()
     {
+        if (Items.Count == 0)
+            return;
+
         List<Item> itemList = Managers.Inven.Items.Values.ToList();
         itemList.Sort((lhs, rhs) => lhs.Slot - rhs.Slot);
 
