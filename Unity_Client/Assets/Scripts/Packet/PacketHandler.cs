@@ -173,4 +173,21 @@ public class PacketHandler
 
         Debug.Log($"Item을 획득했습니다.");
     }
+
+    public static void S2C_EquipItemHandler(PacketSession session, IMessage message)
+    {
+        S2C_EquipItem equipItemPacket = message as S2C_EquipItem;
+
+        // 1) 메모리 갱신
+        Item? item = Managers.Inven.GetItem(equipItemPacket.ItemDbId);
+        if (item == null)
+            return;
+
+        item.Equiped = equipItemPacket.Equiped;
+        Debug.Log($"Item을 착용 변경.");
+
+        // 2) UI 갱신
+        UI_GameScene gameScene = Managers.UI.SceneUI as UI_GameScene;
+        gameScene.InvenUI.RefreshUI();
+    }
 }

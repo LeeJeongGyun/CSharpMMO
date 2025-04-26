@@ -35,6 +35,11 @@ public class Item
         set => Info.Slot = value;
     }
 
+    public bool Equiped
+    {
+        get => Info.Equiped;
+        set => Info.Equiped = value;
+    }
     public string Name { get; protected set; }
 
     public ItemType ItemType { get; private set; }
@@ -70,6 +75,7 @@ public class Item
         newItem.ItemDbId = itemInfo.ItemDbId;
         newItem.Count = itemInfo.Count;
         newItem.Slot = itemInfo.Slot;
+        newItem.Equiped = itemInfo.Equiped;
         return newItem;
     }
 }

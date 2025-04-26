@@ -9,7 +9,7 @@ using Server.Data;
 using Server.DB;
 using Server.Utils;
 
-public class DBTransaction : JobSerializer
+public partial class DBTransaction : JobSerializer
 {
     public static DBTransaction Instance { get; } = new DBTransaction();
 
@@ -74,6 +74,7 @@ public class DBTransaction : JobSerializer
                 bool success = db.SaveChangesEx();
                 if (success)
                 {
+                    player.Inven.RemoveReserveSlot(itemDb.Slot);
                     room.Push(() =>
                     {
                         // 임시 Log

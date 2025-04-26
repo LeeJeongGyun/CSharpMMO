@@ -35,6 +35,7 @@ public class ItemDb
     public int TemplateId { get; set; }
     public int Count { get; set; }
     public int Slot { get; set; }
+    public bool Equiped { get; set; }
 
     [ForeignKey("Owner")]
     public int? OwnerDbId { get; set; }

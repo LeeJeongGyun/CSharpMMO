@@ -89,4 +89,25 @@ internal class PacketHandler
 
         room.Push(room.ApplySkill, player, skillPacket.SkillInfo);
     }
+
+    public static void C2S_EquipItemHandler(PacketSession session, IMessage packet)
+    {
+        C2S_EquipItem? equipItemPacket = packet as C2S_EquipItem;
+        if (equipItemPacket == null)
+            return;
+
+        ClientSession? clientSession = session as ClientSession;
+        if (clientSession == null)
+            return;
+
+        Player? player = ObjectManager.Instance.FindPlayer(clientSession.ObjectId);
+        if (player == null)
+            return;
+
+        GameRoom? room = player.Room;
+        if (room == null)
+            return;
+
+        room.Push(room.ApplyEquipItem, player, equipItemPacket.ItemDbId, equipItemPacket.Equiped);
+    }
 }

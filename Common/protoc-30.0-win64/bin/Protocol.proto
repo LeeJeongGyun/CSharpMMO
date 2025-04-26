@@ -20,6 +20,8 @@ enum PacketID {
 	S2C_CREATE_PLAYER = 15;
 	S2C_ITEM_LIST = 16;
 	S2C_UPDATE_ITEM = 17;
+	C2S_EQUIP_ITEM = 18;
+	S2C_EQUIP_ITEM = 19;
 }
 
 enum ObjectType {
@@ -153,6 +155,16 @@ message S2C_UpdateItem {
 	ItemInfo itemInfo = 1;
 }
 
+message C2S_EquipItem {
+	int32 itemDbId = 1;
+	bool equiped = 2;
+}
+
+message S2C_EquipItem {
+	int32 itemDbId = 1;
+	bool equiped = 2;
+}
+
 message ObjectInfo {
 	int32 objectId = 1;
 	string name = 2;
@@ -192,4 +204,5 @@ message ItemInfo {
 	int32 templateId = 2;
 	int32 count = 3;
 	int32 slot = 4;
+	bool equiped = 5;
 }

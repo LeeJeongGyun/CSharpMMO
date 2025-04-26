@@ -19,6 +19,7 @@ public class UI_Inventory : UI_Base
         {
             GameObject go = Managers.Resource.Instantiate("UI/Scene/UI_Inventory_Item", itemGrid.transform);
             UI_Inventory_Item invenItem = go.GetOrAddComponent<UI_Inventory_Item>();
+            invenItem.transform.Find("Equip").gameObject.SetActive(false);
             Items.Add(invenItem);
         }
 
@@ -38,7 +39,7 @@ public class UI_Inventory : UI_Base
             if (item.Slot < 0 || item.Slot >= 20)
                 continue;
 
-            Items[item.Slot].SetItem(item.TemplateId, item.Count);
+            Items[item.Slot].SetItem(item);
         }
     }
 }
