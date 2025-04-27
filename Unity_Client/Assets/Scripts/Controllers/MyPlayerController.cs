@@ -233,6 +233,26 @@ public class MyPlayerController : PlayerController
                 }
             }
         }
+        else if (Input.GetKey(KeyCode.E))
+        {
+            UI_GameScene gameSceneUI = Managers.UI.SceneUI as UI_GameScene;
+            if (gameSceneUI != null)
+            {
+                UI_Stat statUI = gameSceneUI.StatUI;
+                if (statUI != null)
+                {
+                    if (statUI.gameObject.activeSelf)
+                    {
+                        statUI.gameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        statUI.gameObject.SetActive(true);
+                        statUI.RefreshUI();
+                    }
+                }
+            }
+        }
     }
 
     private void LateUpdate() => Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10);

@@ -58,7 +58,11 @@ public class GameObject
         set => PosInfo.Dir = value;
     }
 
-    public string Name { get; set; }
+    public string Name
+    {
+        get => Info.Name;
+        set => Info.Name = value;
+    }
 
     public virtual int TotalDamage => StatInfo.Attack;
 

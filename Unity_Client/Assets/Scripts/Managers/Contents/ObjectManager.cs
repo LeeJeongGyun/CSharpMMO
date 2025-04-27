@@ -17,6 +17,7 @@ public class ObjectManager
             if (myPlayer)
             {
                 go = Managers.Resource.Instantiate("Creature/MyPlayer");
+                go.name = objectInfo.Name;
                 MyPlayerController mpc = go.GetComponent<MyPlayerController>();
                 mpc.Info = objectInfo;
                 MyPlayerController = mpc;
@@ -24,6 +25,7 @@ public class ObjectManager
             else
             {
                 go = Managers.Resource.Instantiate("Creature/Player");
+                go.name = objectInfo.Name;
                 PlayerController pc = go.GetComponent<PlayerController>();
                 pc.Info = objectInfo;
             }
@@ -31,6 +33,7 @@ public class ObjectManager
         else if (objectInfo.ObjectType == ObjectType.Monster)
         {
             go = Managers.Resource.Instantiate("Creature/Monster");
+            go.name = objectInfo.Name;
             BaseController bc = go.GetComponent<BaseController>();
             bc.Info = objectInfo;
         }

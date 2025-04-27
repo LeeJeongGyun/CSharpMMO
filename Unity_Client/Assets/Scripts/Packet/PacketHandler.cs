@@ -160,6 +160,11 @@ public class PacketHandler
 
         // 추가 스텟 최신화
         Managers.Object.MyPlayerController?.RefreshAdditionalStat();
+
+        // 2) UI 갱신
+        UI_GameScene gameScene = Managers.UI.SceneUI as UI_GameScene;
+        gameScene.InvenUI.RefreshUI();
+        gameScene.StatUI.RefreshUI();
     }
 
     public static void S2C_UpdateItemHandler(PacketSession session, IMessage message)
@@ -189,11 +194,12 @@ public class PacketHandler
         item.Equiped = equipItemPacket.Equiped;
         Debug.Log($"Item을 착용 변경.");
 
+        // 추가 스텟 최신화
+        Managers.Object.MyPlayerController?.RefreshAdditionalStat();
+
         // 2) UI 갱신
         UI_GameScene gameScene = Managers.UI.SceneUI as UI_GameScene;
         gameScene.InvenUI.RefreshUI();
-
-        // 추가 스텟 최신화
-        Managers.Object.MyPlayerController?.RefreshAdditionalStat();
+        gameScene.StatUI.RefreshUI();
     }
 }
