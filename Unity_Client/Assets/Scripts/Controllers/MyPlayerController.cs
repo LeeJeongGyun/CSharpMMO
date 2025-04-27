@@ -8,6 +8,33 @@ public class MyPlayerController : PlayerController
     private bool _inputKey = true;
     private bool _skillInput = false;
 
+    public int AdditionalWeaponDamage { get; private set; }
+
+    public int AdditionalArmorDefence { get; private set; }
+
+    public void RefreshAdditionalStat()
+    {
+        int additionalWeaponDamage = 0;
+        int additionalArmorDefence = 0;
+
+        foreach (Item item in Managers.Inven.GetEquipedItemList())
+        {
+            switch (item.ItemType)
+            {
+            case ItemType.Weapon:
+                additionalWeaponDamage += ((Weapon)item).Damage;
+                break;
+
+            case ItemType.Armor:
+                additionalArmorDefence += ((Armor)item).Defence;
+                break;
+            }
+        }
+
+        AdditionalWeaponDamage = additionalWeaponDamage;
+        AdditionalArmorDefence = additionalArmorDefence;
+    }
+
     public override void OnDead()
     {
         base.OnDead();
@@ -19,6 +46,7 @@ public class MyPlayerController : PlayerController
     protected override void Init()
     {
         base.Init();
+        RefreshAdditionalStat();
     }
 
     protected override void UpdateController()

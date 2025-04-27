@@ -24,6 +24,12 @@ public class UI_Inventory_Item : UI_Base
                 if (_item == null)
                     return;
 
+                if (_item.ItemType == ItemType.Consumable)
+                {
+                    Debug.Log($"{name}은 소비 아이템 입니다.");
+                    return;
+                }
+
                 C2S_EquipItem equipItemPacket = new C2S_EquipItem();
                 equipItemPacket.ItemDbId = _item.ItemDbId;
                 equipItemPacket.Equiped = !_item.Equiped;

@@ -5,19 +5,17 @@ using Server.Data;
 
 public class Bullet : Projectile
 {
-    private long _moveTick = 0;
-
     public GameObject Owner { get; set; }
 
     public float Speed { get; init; }
 
     public override void Update()
     {
-        if (_moveTick > Environment.TickCount64)
-            return;
-
         if (Room == null || Owner == null || SkillData == null || SkillData.projectile == null)
             return;
+
+        int speedToTick = (int)(1000 / SkillData.projectile.speed);
+        Room.PushAfter(Update, speedToTick);
 
         CellPos = GetFrontCellPos();
         if (Room.Map.FindCollision(CellPos))
@@ -38,9 +36,6 @@ public class Bullet : Projectile
         movePacket.ObjectId = ObjectId;
         movePacket.PosInfo = PosInfo;
         Room.BroadcastMessage(movePacket);
-
-        long speedToTick = (long)(1000 / SkillData.projectile.speed);
-        _moveTick = Environment.TickCount64 + speedToTick;
     }
 
     public override GameObject GetOwner()

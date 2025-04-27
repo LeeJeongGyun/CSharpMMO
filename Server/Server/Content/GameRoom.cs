@@ -33,9 +33,6 @@ public partial class GameRoom : JobSerializer
     // 주기적으로 호출 필요
     public void Update()
     {
-        foreach (var projectile in _projectiles.Values)
-            projectile.Update();
-
         foreach (var monster in _monsters.Values)
             monster.Update();
 
@@ -60,6 +57,9 @@ public partial class GameRoom : JobSerializer
 
             // 방에 입장 등록
             _players.Add(objectId, player);
+
+            // 내 스텟 최신화
+            player.RefreshAdditionalStat();
 
             // Map에 배치 진행
             _map.InitObjectPosition(gameObject);
@@ -100,6 +100,7 @@ public partial class GameRoom : JobSerializer
             projectile!.Room = this;
 
             _projectiles.Add(objectId, gameObject as Projectile);
+            projectile.Update();
         }
 
         // 상대방에게 내 정보 송신

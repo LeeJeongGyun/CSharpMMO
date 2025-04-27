@@ -7,6 +7,7 @@ using UnityEngine;
 public class ObjectManager
 {
     private Dictionary<int, GameObject> _objects = new Dictionary<int, GameObject>();
+    public MyPlayerController MyPlayerController { get; set; }
 
     public void Add(ObjectInfo objectInfo, bool myPlayer = false)
     {
@@ -18,6 +19,7 @@ public class ObjectManager
                 go = Managers.Resource.Instantiate("Creature/MyPlayer");
                 MyPlayerController mpc = go.GetComponent<MyPlayerController>();
                 mpc.Info = objectInfo;
+                MyPlayerController = mpc;
             }
             else
             {

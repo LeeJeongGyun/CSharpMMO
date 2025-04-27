@@ -108,6 +108,6 @@ internal class PacketHandler
         if (room == null)
             return;
 
-        room.Push(room.ApplyEquipItem, player, equipItemPacket.ItemDbId, equipItemPacket.Equiped);
+        room.Push(room.ApplyEquipItem, player, equipItemPacket);
     }
 }

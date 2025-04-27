@@ -157,6 +157,9 @@ public class PacketHandler
             Item item = Item.MakeItem(itemInfo);
             Managers.Inven.Add(item);
         }
+
+        // 추가 스텟 최신화
+        Managers.Object.MyPlayerController?.RefreshAdditionalStat();
     }
 
     public static void S2C_UpdateItemHandler(PacketSession session, IMessage message)
@@ -189,5 +192,8 @@ public class PacketHandler
         // 2) UI 갱신
         UI_GameScene gameScene = Managers.UI.SceneUI as UI_GameScene;
         gameScene.InvenUI.RefreshUI();
+
+        // 추가 스텟 최신화
+        Managers.Object.MyPlayerController?.RefreshAdditionalStat();
     }
 }
