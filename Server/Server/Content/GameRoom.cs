@@ -31,13 +31,7 @@ public partial class GameRoom : JobSerializer
     public Map Map => _map;
 
     // 주기적으로 호출 필요
-    public void Update()
-    {
-        foreach (var monster in _monsters.Values)
-            monster.Update();
-
-        Flush();
-    }
+    public void Update() => Flush();
 
     public void EnterRoom(GameObject gameObject)
     {
@@ -93,6 +87,9 @@ public partial class GameRoom : JobSerializer
 
             _monsters.Add(objectId, monster);
             _map.InitObjectPosition(gameObject);
+
+            // 몬스터 AI 등록
+            monster.Update();
         }
         else if (gameObject.ObjectType == ObjectType.Projectile)
         {
@@ -100,6 +97,8 @@ public partial class GameRoom : JobSerializer
             projectile!.Room = this;
 
             _projectiles.Add(objectId, gameObject as Projectile);
+
+            // Projectile AI 등록
             projectile.Update();
         }
 

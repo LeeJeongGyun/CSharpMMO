@@ -1,6 +1,7 @@
 ﻿namespace Server.Content.Object;
 
 using Protocol;
+using Server.Content.Job;
 using Server.Data;
 
 public class Monster : GameObject
@@ -15,6 +16,8 @@ public class Monster : GameObject
     private int _chaseDistance = 15;
 
     private int _skillRange = 1;
+
+    private IJob? _lastJob;
 
     public Monster()
     {
@@ -56,6 +59,18 @@ public class Monster : GameObject
         case ObjectState.Dead:
             UpdateDead();
             break;
+        }
+
+        // Per 5 프레임
+        _lastJob = Room?.PushAfter(Update, 100);
+    }
+
+    public void CancelJob()
+    {
+        if (_lastJob != null)
+        {
+            _lastJob.Cancel = true;
+            _lastJob = null;
         }
     }
 
@@ -188,6 +203,7 @@ public class Monster : GameObject
 
     protected override void OnDead(GameObject attacker)
     {
+        CancelJob();
         base.OnDead(attacker);
 
         if (attacker.GetOwner() is not Player)

@@ -2,6 +2,8 @@
 
 public interface IJob
 {
+    bool Cancel { get; set; }
+
     void Execute();
 }
 
@@ -11,7 +13,13 @@ public class Job : IJob
 
     public Job(Action action) => _action = action;
 
-    public void Execute() => _action.Invoke();
+    public bool Cancel { get; set; } = false;
+
+    public void Execute()
+    {
+        if (!Cancel)
+            _action.Invoke();
+    }
 }
 
 public class Job<T> : IJob
@@ -25,7 +33,13 @@ public class Job<T> : IJob
         _param = param;
     }
 
-    public void Execute() => _action.Invoke(_param);
+    public bool Cancel { get; set; } = false;
+
+    public void Execute()
+    {
+        if (!Cancel)
+            _action.Invoke(_param);
+    }
 }
 
 public class Job<T1, T2> : IJob
@@ -41,7 +55,13 @@ public class Job<T1, T2> : IJob
         _param2 = param2;
     }
 
-    public void Execute() => _action.Invoke(_param1, _param2);
+    public bool Cancel { get; set; } = false;
+
+    public void Execute()
+    {
+        if (!Cancel)
+            _action.Invoke(_param1, _param2);
+    }
 }
 
 public class Job<T1, T2, T3> : IJob
@@ -59,5 +79,11 @@ public class Job<T1, T2, T3> : IJob
         _param3 = param3;
     }
 
-    public void Execute() => _action.Invoke(_param1, _param2, _param3);
+    public bool Cancel { get; set; } = false;
+
+    public void Execute()
+    {
+        if (!Cancel)
+            _action.Invoke(_param1, _param2, _param3);
+    }
 }

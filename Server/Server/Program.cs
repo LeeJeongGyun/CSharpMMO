@@ -42,7 +42,7 @@ internal class Program
 
         // 1번 GameRoom 생성
         GameRoom room = RoomManager.Instance.AddRoom();
-        TickRoom(room, 50);
+        TickRoom(room, 10);
 
         PerformanceProfiler.Instance.prevRecvCount = 0;
         string hostName = Dns.GetHostName();
