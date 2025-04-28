@@ -122,8 +122,11 @@ public partial class ClientSession : PacketSession
         PlayerServerState = PlayerServerState.PlayerStateGame;
 
         // 2. Room에 Player 입장
-        GameRoom? gameRoom = RoomManager.Instance.FindRoom(1);
-        gameRoom?.Push(gameRoom.EnterRoom, player);
+        GameLogic.Instance.Push(() =>
+        {
+            GameRoom? gameRoom = GameLogic.Instance.FindRoom(1);
+            gameRoom?.Push(gameRoom.EnterRoom, player);
+        });
     }
 
     public void HandleCreatePlayer(C2S_CreatePlayer createPlayerPacket)

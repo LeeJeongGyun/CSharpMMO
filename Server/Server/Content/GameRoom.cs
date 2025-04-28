@@ -13,7 +13,6 @@ public partial class GameRoom : JobSerializer
     private Dictionary<int, Player> _players = new Dictionary<int, Player>();
     private Dictionary<int, Monster> _monsters = new Dictionary<int, Monster>();
     private Dictionary<int, Projectile> _projectiles = new Dictionary<int, Projectile>();
-    private object _lock = new object();
     private Map _map;
 
     public GameRoom()

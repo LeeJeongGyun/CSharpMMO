@@ -34,7 +34,6 @@ public class Map
 {
     private bool[,] _collision;
     private GameObject[,] _objects;
-    private object _lock = new object();
 
     private int _minX, _maxX;
 
