@@ -197,17 +197,21 @@ public class Map
         // H = 목적지에서 얼마나 가까운지 (작을 수록 좋음, 고정)
 
         // (y, x) 이미 방문했는지 여부 (방문 = closed 상태)
-        bool[,] closed = new bool[SizeY, SizeX]; // CloseList
+        //bool[,] closed = new bool[SizeY, SizeX]; // CloseList
+        HashSet<Pos> closedList = new HashSet<Pos>();
 
         // (y, x) 가는 길을 한 번이라도 발견했는지
         // 발견X => MaxValue
         // 발견O => F = G + H
-        int[,] open = new int[SizeY, SizeX]; // OpenList
-        for (int y = 0; y < SizeY; y++)
-            for (int x = 0; x < SizeX; x++)
-                open[y, x] = Int32.MaxValue;
+        //int[,] open = new int[SizeY, SizeX]; // OpenList
+        //for (int y = 0; y < SizeY; y++)
+        //    for (int x = 0; x < SizeX; x++)
+        //        open[y, x] = Int32.MaxValue;
 
-        Pos[,] parent = new Pos[SizeY, SizeX];
+        Dictionary<Pos, int> openList = new Dictionary<Pos, int>(); // OpenList
+
+        // Pos[,] parent = new Pos[SizeY, SizeX];
+        Dictionary<Pos, Pos> parent = new Dictionary<Pos, Pos>();
 
         // 오픈리스트에 있는 정보들 중에서, 가장 좋은 후보를 빠르게 뽑아오기 위한 도구
         PriorityQ<PQNode> pq = new PriorityQ<PQNode>();
@@ -217,22 +221,24 @@ public class Map
         Pos dest = Cell2Pos(destCellPos);
 
         // 시작점 발견 (예약 진행)
-        open[pos.Y, pos.X] = 10 * (Math.Abs(dest.Y - pos.Y) + Math.Abs(dest.X - pos.X));
+        openList.Add(pos, 10 * (Math.Abs(dest.Y - pos.Y) + Math.Abs(dest.X - pos.X)));
         pq.Push(new PQNode() { F = 10 * (Math.Abs(dest.Y - pos.Y) + Math.Abs(dest.X - pos.X)), G = 0, Y = pos.Y, X = pos.X });
-        parent[pos.Y, pos.X] = new Pos(pos.Y, pos.X);
+        parent.Add(pos, pos);
 
         while (pq.Count > 0)
         {
             // 제일 좋은 후보를 찾는다
             PQNode node = pq.Pop();
+            Pos curPos = new Pos(node.Y, node.X);
             // 동일한 좌표를 여러 경로로 찾아서, 더 빠른 경로로 인해서 이미 방문(closed)된 경우 스킵
-            if (closed[node.Y, node.X])
+            if (closedList.Contains(curPos))
                 continue;
 
             // 방문한다
-            closed[node.Y, node.X] = true;
+            closedList.Add(curPos);
+
             // 목적지 도착했으면 바로 종료
-            if (node.Y == dest.Y && node.X == dest.X)
+            if (curPos == dest)
                 break;
 
             // 상하좌우 등 이동할 수 있는 좌표인지 확인해서 예약(open)한다
@@ -252,42 +258,43 @@ public class Map
                 }
 
                 // 이미 방문한 곳이면 스킵
-                if (closed[next.Y, next.X])
+                if (closedList.Contains(next))
                     continue;
 
                 // 비용 계산
                 int g = 0;// node.G + _cost[i];
                 int h = 10 * ((dest.Y - next.Y) * (dest.Y - next.Y) + (dest.X - next.X) * (dest.X - next.X));
+
                 // 다른 경로에서 더 빠른 길 이미 찾았으면 스킵
-                if (open[next.Y, next.X] < g + h)
+                if (openList.TryGetValue(next, out int prevF) && prevF < g + h)
                     continue;
 
                 // 예약 진행
-                open[dest.Y, dest.X] = g + h;
+                if (openList.TryAdd(next, g + h) == false)
+                    openList[next] = g + h;
+
                 pq.Push(new PQNode() { F = g + h, G = g, Y = next.Y, X = next.X });
-                parent[next.Y, next.X] = new Pos(node.Y, node.X);
+                if (parent.TryAdd(next, curPos) == false)
+                    parent[next] = curPos;
             }
         }
 
         return CalcCellPathFromParent(parent, dest);
     }
 
-    private List<Vector2Int> CalcCellPathFromParent(Pos[,] parent, Pos dest)
+    private List<Vector2Int> CalcCellPathFromParent(Dictionary<Pos, Pos> parent, Pos dest)
     {
         List<Vector2Int> cells = new List<Vector2Int>();
 
-        int y = dest.Y;
-        int x = dest.X;
-        while (parent[y, x].Y != y || parent[y, x].X != x)
+        Pos pos = dest;
+        while (parent[pos] != pos)
         {
-            cells.Add(Pos2Cell(new Pos(y, x)));
-            Pos pos = parent[y, x];
-            y = pos.Y;
-            x = pos.X;
+            cells.Add(Pos2Cell(pos));
+            pos = parent[pos];
         }
-        cells.Add(Pos2Cell(new Pos(y, x)));
-        cells.Reverse();
 
+        cells.Add(Pos2Cell(pos));
+        cells.Reverse();
         return cells;
     }
 
@@ -309,8 +316,19 @@ public class Map
 
         public int X;
 
-        public Pos(int y, int x)
-        { Y = y; X = x; }
+        public Pos(int y, int x) => (Y, X) = (y, x);
+
+        public static bool operator ==(Pos lhs, Pos rhs) => lhs.X == rhs.X && lhs.Y == rhs.Y;
+
+        public static bool operator !=(Pos lhs, Pos rhs) => !(lhs == rhs);
+
+        public override int GetHashCode()
+        {
+            long hashValue = (Y << 32) | X;
+            return hashValue.GetHashCode();
+        }
+
+        public override bool Equals(object obj) => this == (Pos)obj;
     }
 
     public struct PQNode : IComparable<PQNode>

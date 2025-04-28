@@ -36,9 +36,10 @@ internal class Program
         listener.Start(endPoint, 1);
         Console.WriteLine("Listening...");
 
-        _threads.Add(new Thread(GameLogicThread));
-        _threads.Add(new Thread(DbThread));
-        _threads.Add(new Thread(SendThread));
+        _threads.Add(new Thread(GameLogicThread) { Name = "GameLogicThread" });
+        _threads.Add(new Thread(DbThread) { Name = "DbThread" });
+        _threads.Add(new Thread(SendThread) { Name = "SendThread" });
+        Thread.CurrentThread.Name = "MainThread";
 
         foreach (var thread in _threads)
             thread.Start();
