@@ -20,7 +20,7 @@ internal class GameLogic : JobSerializer
 
     public GameRoom AddRoom()
     {
-        GameRoom room = new GameRoom() { Id = _roomId++ };
+        GameRoom room = new GameRoom(10) { Id = _roomId++ };
         _rooms.Add(room.Id, room);
         return room;
     }

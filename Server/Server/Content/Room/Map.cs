@@ -1,4 +1,4 @@
-﻿namespace Server.Content;
+﻿namespace Server.Content.Room;
 
 using System.Diagnostics;
 using Protocol;
@@ -16,7 +16,7 @@ public struct Vector2Int
     public int x { get; set; }
     public int y { get; set; }
 
-    public int sqrMagnitude => (x * x + y * y);
+    public int sqrMagnitude => x * x + y * y;
 
     public int magnitude => (int)Math.Sqrt(sqrMagnitude);
 
@@ -32,13 +32,10 @@ public struct Vector2Int
 // 외부에서 직접 접근 시 락 필요.
 public class Map
 {
+    public int _minX, _maxX;
+    public int _minY, _maxY;
     private bool[,] _collision;
     private GameObject[,] _objects;
-
-    private int _minX, _maxX;
-
-    private int _minY, _maxY;
-
     public int SizeX { get; private set; }
 
     public int SizeY { get; private set; }
@@ -48,7 +45,7 @@ public class Map
         string mapName = $"Map_{mapId.ToString("000")}";
 
         string mapText = File.ReadAllText($"../../../../../Common/MapData/{mapName}.txt");
-        StringReader sr = new StringReader(mapText);
+        var sr = new StringReader(mapText);
 
         _maxX = int.Parse(sr.ReadLine());
         _minX = int.Parse(sr.ReadLine());
@@ -84,7 +81,7 @@ public class Map
             {
                 int randX = Random.Shared.Next(_minX, _maxX - 1);
                 int randY = Random.Shared.Next(_minY, _maxY - 1);
-                Vector2Int newCellPos = new Vector2Int(randX, randY);
+                var newCellPos = new Vector2Int(randX, randY);
 
                 if (FindObject(newCellPos) == null && FindCollision(newCellPos) == false)
                 {
@@ -123,11 +120,31 @@ public class Map
             return false;
         }
 
+        // Zone 정보 변경
+        Zone prevZone = gameObject.Room.GetZone(gameObject.CellPos);
+        Zone moveZone = gameObject.Room.GetZone(dstCellPos);
+
+        if (prevZone != moveZone)
+        {
+            if (gameObject.ObjectType == ObjectType.Player)
+            {
+                Player player = (Player)gameObject;
+                prevZone.Players.Remove(player);
+                moveZone.Players.Add(player);
+            }
+            else if (gameObject.ObjectType == ObjectType.Monster)
+            {
+                Monster monster = (Monster)gameObject;
+                prevZone.Monsters.Remove(monster);
+                moveZone.Monsters.Add(monster);
+            }
+        }
+
         // 내 현재 좌표 변경
         gameObject.CellPos = dstCellPos;
 
         int convertedX = dstCellPos.x - _minX;
-        int convertedY = (_maxY - 1) - dstCellPos.y;
+        int convertedY = _maxY - 1 - dstCellPos.y;
         _objects[convertedY, convertedX] = gameObject;
         return true;
     }
@@ -148,7 +165,7 @@ public class Map
         }
 
         int convertedX = gameObject.CellPos.x - _minX;
-        int convertedY = (_maxY - 1) - gameObject.CellPos.y;
+        int convertedY = _maxY - 1 - gameObject.CellPos.y;
 
         _objects[convertedY, convertedX] = null;
         return true;
@@ -160,7 +177,7 @@ public class Map
             return true;
 
         int convertedX = cellPos.x - _minX;
-        int convertedY = (_maxY - 1) - cellPos.y;
+        int convertedY = _maxY - 1 - cellPos.y;
         return _collision[convertedY, convertedX];
     }
 
@@ -170,7 +187,7 @@ public class Map
             return null;
 
         int convertedX = cellPos.x - _minX;
-        int convertedY = (_maxY - 1) - cellPos.y;
+        int convertedY = _maxY - 1 - cellPos.y;
         return _objects[convertedY, convertedX];
     }
 
@@ -198,7 +215,7 @@ public class Map
 
         // (y, x) 이미 방문했는지 여부 (방문 = closed 상태)
         //bool[,] closed = new bool[SizeY, SizeX]; // CloseList
-        HashSet<Pos> closedList = new HashSet<Pos>();
+        var closedList = new HashSet<Pos>();
 
         // (y, x) 가는 길을 한 번이라도 발견했는지
         // 발견X => MaxValue
@@ -208,13 +225,13 @@ public class Map
         //    for (int x = 0; x < SizeX; x++)
         //        open[y, x] = Int32.MaxValue;
 
-        Dictionary<Pos, int> openList = new Dictionary<Pos, int>(); // OpenList
+        var openList = new Dictionary<Pos, int>(); // OpenList
 
         // Pos[,] parent = new Pos[SizeY, SizeX];
-        Dictionary<Pos, Pos> parent = new Dictionary<Pos, Pos>();
+        var parent = new Dictionary<Pos, Pos>();
 
         // 오픈리스트에 있는 정보들 중에서, 가장 좋은 후보를 빠르게 뽑아오기 위한 도구
-        PriorityQ<PQNode> pq = new PriorityQ<PQNode>();
+        var pq = new PriorityQ<PQNode>();
 
         // CellPos -> ArrayPos
         Pos pos = Cell2Pos(startCellPos);
@@ -229,7 +246,7 @@ public class Map
         {
             // 제일 좋은 후보를 찾는다
             PQNode node = pq.Pop();
-            Pos curPos = new Pos(node.Y, node.X);
+            var curPos = new Pos(node.Y, node.X);
             // 동일한 좌표를 여러 경로로 찾아서, 더 빠른 경로로 인해서 이미 방문(closed)된 경우 스킵
             if (closedList.Contains(curPos))
                 continue;
@@ -244,7 +261,7 @@ public class Map
             // 상하좌우 등 이동할 수 있는 좌표인지 확인해서 예약(open)한다
             for (int i = 0; i < _deltaY.Length; i++)
             {
-                Pos next = new Pos(node.Y + _deltaY[i], node.X + _deltaX[i]);
+                var next = new Pos(node.Y + _deltaY[i], node.X + _deltaX[i]);
 
                 // 유효 범위를 벗어났으면 스킵
                 // 벽으로 막혀서 갈 수 없으면 스킵
@@ -284,7 +301,7 @@ public class Map
 
     private List<Vector2Int> CalcCellPathFromParent(Dictionary<Pos, Pos> parent, Pos dest)
     {
-        List<Vector2Int> cells = new List<Vector2Int>();
+        var cells = new List<Vector2Int>();
 
         Pos pos = dest;
         while (parent[pos] != pos)
@@ -301,13 +318,13 @@ public class Map
     private Pos Cell2Pos(Vector2Int cell)
     {
         // CellPos -> ArrayPos
-        return new Pos((_maxY - 1) - cell.y, cell.x - _minX);
+        return new Pos(_maxY - 1 - cell.y, cell.x - _minX);
     }
 
     private Vector2Int Pos2Cell(Pos pos)
     {
         // ArrayPos -> CellPos
-        return new Vector2Int(pos.X + _minX, (_maxY - 1) - pos.Y);
+        return new Vector2Int(pos.X + _minX, _maxY - 1 - pos.Y);
     }
 
     public struct Pos
@@ -324,7 +341,7 @@ public class Map
 
         public override int GetHashCode()
         {
-            long hashValue = (Y << 32) | X;
+            long hashValue = Y << 32 | X;
             return hashValue.GetHashCode();
         }
 

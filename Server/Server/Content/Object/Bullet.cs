@@ -35,7 +35,7 @@ public class Bullet : Projectile
         S2C_Move movePacket = new S2C_Move();
         movePacket.ObjectId = ObjectId;
         movePacket.PosInfo = PosInfo;
-        Room.BroadcastMessage(movePacket);
+        Room.BroadcastMessage(CellPos, movePacket);
     }
 
     public override GameObject GetOwner()

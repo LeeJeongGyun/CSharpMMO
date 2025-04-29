@@ -2,6 +2,7 @@
 
 using Protocol;
 using Server.Content.Job;
+using Server.Content.Room;
 using Server.Data;
 
 public class Monster : GameObject
@@ -185,7 +186,7 @@ public class Monster : GameObject
             S2C_Skill skillPacket = new S2C_Skill() { SkillInfo = new SkillInfo() };
             skillPacket.ObjectId = ObjectId;
             skillPacket.SkillInfo.SkillId = skillData.id;
-            Room?.BroadcastMessage(skillPacket);
+            Room?.BroadcastMessage(CellPos, skillPacket);
 
             // 스킬 딜레이 타임 갱신
             long skillDelayTick = (int)(1000 * skillData.cooldown);
@@ -240,6 +241,6 @@ public class Monster : GameObject
         S2C_Move movePacket = new S2C_Move();
         movePacket.ObjectId = ObjectId;
         movePacket.PosInfo = PosInfo;
-        Room?.BroadcastMessage(movePacket);
+        Room?.BroadcastMessage(CellPos, movePacket);
     }
 }

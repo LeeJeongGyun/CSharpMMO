@@ -2,10 +2,9 @@
 
 namespace Server.Content;
 
-using System.Numerics;
-using Google.Protobuf;
 using Protocol;
 using Server.Content.Job;
+using Server.Content.Room;
 using Server.Data;
 
 public partial class GameRoom : JobSerializer
@@ -24,7 +23,7 @@ public partial class GameRoom : JobSerializer
         var movePacket = new S2C_Move();
         movePacket.ObjectId = player.ObjectId;
         movePacket.PosInfo = posInfo;
-        BroadcastMessage(movePacket, excludeId: player.ObjectId);
+        BroadcastMessage(player.CellPos, movePacket, excludeId: player.ObjectId);
     }
 
     public void ApplySkill(Player player, SkillInfo skillInfo)
@@ -67,6 +66,6 @@ public partial class GameRoom : JobSerializer
         var skillPacket = new S2C_Skill();
         skillPacket.ObjectId = player.ObjectId;
         skillPacket.SkillInfo = skillInfo;
-        BroadcastMessage(skillPacket);
+        BroadcastMessage(player.CellPos, skillPacket);
     }
 }

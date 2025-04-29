@@ -3,10 +3,13 @@
 namespace Server.Content;
 
 using System.Numerics;
+using System.Threading;
 using Google.Protobuf;
 using Protocol;
 using Server.Content.Job;
+using Server.Content.Room;
 using Server.Data;
+using Server.DB;
 
 public partial class GameRoom : JobSerializer
 {
@@ -15,19 +18,50 @@ public partial class GameRoom : JobSerializer
     private Dictionary<int, Projectile> _projectiles = new Dictionary<int, Projectile>();
     private Map _map;
 
-    public GameRoom()
+    public GameRoom(int zoneCells)
     {
         // TODO 추후 맵이 여러개 된다면 이쪽 수정 필요.
         // 지금은 맵 데이터 1개 밖에 없음으로 하드코딩
         _map = new Map();
         _map.LoadMap(1);
 
+        // Zone 생성
+        int zoneSizeX = (_map.SizeX + zoneCells - 1) / zoneCells;
+        int zoneSizeY = (_map.SizeY + zoneCells - 1) / zoneCells;
+        ZoneCells = zoneCells;
+        Zones = new Zone[zoneSizeY, zoneSizeX];
+
+        for (int y = 0; y < zoneSizeY; ++y)
+        {
+            for (int x = 0; x < zoneSizeX; ++x)
+            {
+                Zones[y, x] = new Zone() { IndexY = y, IndexX = x };
+            }
+        }
+        // Temp
         GenerateMonsterAI(1);
     }
+
+    public Zone[,] Zones { get; private set; }
+    public int ZoneCells { get; private set; }
 
     public int Id { get; init; }
 
     public Map Map => _map;
+
+    public Zone? GetZone(Vector2Int cellPos)
+    {
+        int zoneX = (cellPos.x - Map._minX) / ZoneCells;
+        int zoneY = (Map._maxY - 1 - cellPos.y) / ZoneCells;
+
+        if (zoneX < 0 || zoneX >= Zones.GetLength(1))
+            return null;
+
+        if (zoneY < 0 || zoneY >= Zones.GetLength(0))
+            return null;
+
+        return Zones[zoneY, zoneX];
+    }
 
     // 주기적으로 호출 필요
     public void Update() => Flush();
@@ -56,6 +90,10 @@ public partial class GameRoom : JobSerializer
 
             // Map에 배치 진행
             _map.InitObjectPosition(gameObject);
+
+            // Player Zone에 배치
+            Zone myZone = GetZone(player.CellPos);
+            myZone.Players.Add(player);
 
             // 1. 입장 패킷 송신
             var enterRoomPacket = new S2C_EnterRoom();
@@ -87,6 +125,10 @@ public partial class GameRoom : JobSerializer
             _monsters.Add(objectId, monster);
             _map.InitObjectPosition(gameObject);
 
+            // Monster Zone에 배치
+            Zone myZone = GetZone(monster.CellPos);
+            myZone.Monsters.Add(monster);
+
             // 몬스터 AI 등록
             monster.Update();
         }
@@ -97,6 +139,10 @@ public partial class GameRoom : JobSerializer
 
             _projectiles.Add(objectId, gameObject as Projectile);
 
+            // Projectile Zone에 배치
+            Zone myZone = GetZone(projectile.CellPos);
+            myZone.Projectiles.Add(projectile);
+
             // Projectile AI 등록
             projectile.Update();
         }
@@ -106,9 +152,9 @@ public partial class GameRoom : JobSerializer
             var spawnPacket = new S2C_Spawn();
             spawnPacket.ObjectInfos.Add(gameObject.Info);
             if (gameObject.ObjectType == ObjectType.Player)
-                BroadcastMessage(spawnPacket, excludeId: objectId);
+                BroadcastMessage(gameObject.CellPos, spawnPacket, excludeId: objectId);
             else
-                BroadcastMessage(spawnPacket);
+                BroadcastMessage(gameObject.CellPos, spawnPacket);
         }
     }
 
@@ -121,6 +167,7 @@ public partial class GameRoom : JobSerializer
             return;
         }
 
+        Vector2Int? curCellPos = null;
         if (type == ObjectType.Player)
         {
             Player? player = null;
@@ -128,6 +175,9 @@ public partial class GameRoom : JobSerializer
 
             if (player == null)
                 return;
+
+            // Broadcasting을 위한 현재 cellPos 설정
+            curCellPos = player.CellPos;
 
             // 1. 나에게 퇴장 정보 송신
             var leavePacket = new S2C_LeaveRoom();
@@ -137,6 +187,12 @@ public partial class GameRoom : JobSerializer
             player.OnLeaveRoom(); // DB 정보 갱신
             player.Room = null;
             _players.Remove(objectId);
+
+            // Zone에서 제거
+            Zone myZone = GetZone(player.CellPos);
+            myZone.Players.Remove(player);
+
+            // 맵에서 제거
             _map.RemoveObject(player);
         }
         else if (type == ObjectType.Monster)
@@ -146,19 +202,38 @@ public partial class GameRoom : JobSerializer
             if (monster == null)
                 return;
 
+            // Broadcasting을 위한 현재 cellPos 설정
+            curCellPos = monster.CellPos;
+
             monster.Room = null;
             _monsters.Remove(objectId);
+
+            // Zone에서 제거
+            Zone myZone = GetZone(monster.CellPos);
+            myZone.Monsters.Remove(monster);
+
+            // 맵에서 제거
             _map.RemoveObject(monster);
         }
         else if (type == ObjectType.Projectile)
         {
-            _projectiles.Remove(objectId);
+            if (_projectiles.TryGetValue(objectId, out Projectile? projectile))
+            {
+                // Broadcasting을 위한 현재 cellPos 설정
+                curCellPos = projectile.CellPos;
+
+                _projectiles.Remove(objectId);
+
+                // Zone에서 제거
+                Zone myZone = GetZone(projectile.CellPos);
+                myZone.Projectiles.Remove(projectile);
+            }
         }
 
         // 2. 상대방에게 내 퇴장 정보 전달
         var despawnPacket = new S2C_Despawn();
         despawnPacket.ObjectId = objectId;
-        BroadcastMessage(despawnPacket);
+        BroadcastMessage(curCellPos!.Value, despawnPacket);
     }
 
     public Player? FindPlayer(int playerId)
@@ -185,15 +260,42 @@ public partial class GameRoom : JobSerializer
         _projectiles.Clear();
     }
 
-    public void BroadcastMessage(IMessage message, int excludeId = -1)
+    public void BroadcastMessage(Vector2Int cellPos, IMessage message, int excludeId = -1)
     {
-        foreach (var player in _players.Values)
+        List<Zone> adjacentZones = GetAdjacentZone(cellPos);
+        foreach (var zone in adjacentZones)
         {
-            if (player.ObjectId == excludeId)
-                continue;
+            foreach (Player player in zone.Players)
+            {
+                if (player.ObjectId == excludeId)
+                    continue;
 
-            player.Session.Send(message);
+                player.Session.Send(message);
+            }
         }
+    }
+
+    private List<Zone> GetAdjacentZone(Vector2Int cellPos, int cellRange = 5)
+    {
+        // 중복 제거
+        HashSet<Zone> adjacentZone = new HashSet<Zone>();
+        int[] delta = { -cellRange, +cellRange };
+        foreach (int dy in delta)
+        {
+            foreach (int dx in delta)
+            {
+                int y = cellPos.y + dy;
+                int x = cellPos.x + dx;
+
+                Zone? zone = GetZone(new Vector2Int(x, y));
+                if (zone == null)
+                    continue;
+
+                adjacentZone.Add(zone);
+            }
+        }
+
+        return adjacentZone.ToList();
     }
 
     private void GenerateMonsterAI(int monsterCount)

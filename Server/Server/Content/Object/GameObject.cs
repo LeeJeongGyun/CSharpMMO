@@ -1,6 +1,7 @@
 ﻿namespace Server.Content.Object;
 
 using Protocol;
+using Server.Content.Room;
 
 public class GameObject
 {
@@ -78,7 +79,7 @@ public class GameObject
         S2C_UpdateHp updateHpPacket = new S2C_UpdateHp();
         updateHpPacket.ObjectId = ObjectId;
         updateHpPacket.Hp = StatInfo.Hp;
-        Room?.BroadcastMessage(updateHpPacket);
+        Room?.BroadcastMessage(CellPos, updateHpPacket);
 
         if (StatInfo.Hp == 0)
         {
@@ -122,7 +123,7 @@ public class GameObject
         GameRoom? room = Room;
         if (room != null)
         {
-            room.BroadcastMessage(diePacket);
+            room.BroadcastMessage(CellPos, diePacket);
             room.LeaveRoom(ObjectType, ObjectId);
             ResetPlayerInfo();
             room.EnterRoom(this);
