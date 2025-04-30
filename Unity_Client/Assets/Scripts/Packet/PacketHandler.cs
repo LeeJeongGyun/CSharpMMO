@@ -33,7 +33,8 @@ public class PacketHandler
     public static void S2C_DespawnHandler(PacketSession session, IMessage message)
     {
         S2C_Despawn despawnPacket = message as S2C_Despawn;
-        Managers.Object.Remove(despawnPacket.ObjectId);
+        foreach (int objectId in despawnPacket.ObjectIds)
+            Managers.Object.Remove(objectId);
     }
 
     public static void S2C_MoveHandler(PacketSession session, IMessage message)

@@ -13,6 +13,7 @@ using Server.DB;
 
 public partial class GameRoom : JobSerializer
 {
+    public const int visionCells = 5;
     private Dictionary<int, Player> _players = new Dictionary<int, Player>();
     private Dictionary<int, Monster> _monsters = new Dictionary<int, Monster>();
     private Dictionary<int, Projectile> _projectiles = new Dictionary<int, Projectile>();
@@ -44,7 +45,6 @@ public partial class GameRoom : JobSerializer
 
     public Zone[,] Zones { get; private set; }
     public int ZoneCells { get; private set; }
-
     public int Id { get; init; }
 
     public Map Map => _map;
@@ -92,30 +92,39 @@ public partial class GameRoom : JobSerializer
             _map.InitObjectPosition(gameObject);
 
             // Player Zone에 배치
-            Zone myZone = GetZone(player.CellPos);
-            myZone.Players.Add(player);
+            GetZone(player.CellPos)!.Players.Add(player);
 
             // 1. 입장 패킷 송신
             var enterRoomPacket = new S2C_EnterRoom();
             enterRoomPacket.ObjectInfo = gameObject.Info;
             gameObject.Session.Send(enterRoomPacket);
 
-            // 2. 나에게 상대방 정보 송신
-            var spawnPacket = new S2C_Spawn();
-            foreach (var other in _players.Values)
+            // Zone에 있는 Objct 정보 player에게 송신
+            List<Zone> zones = GetAdjacentZone(player.CellPos);
+
+            S2C_Spawn spawnPacket = new S2C_Spawn();
+            foreach (Player p in zones.SelectMany(zone => zone.Players))
             {
-                if (other.ObjectId != gameObject.ObjectId)
-                    spawnPacket.ObjectInfos.Add(other.Info);
+                spawnPacket.ObjectInfos.Add(p.Info);
+                player.Vision._prevObjects.Add(p);
             }
 
-            foreach (var monster in _monsters.Values)
-                spawnPacket.ObjectInfos.Add(monster.Info);
+            foreach (Monster m in zones.SelectMany(zone => zone.Monsters))
+            {
+                spawnPacket.ObjectInfos.Add(m.Info);
+                player.Vision._prevObjects.Add(m);
+            }
 
-            foreach (var projectile in _projectiles.Values)
-                spawnPacket.ObjectInfos.Add(projectile.Info);
+            foreach (Projectile pj in zones.SelectMany(zone => zone.Projectiles))
+            {
+                spawnPacket.ObjectInfos.Add(pj.Info);
+                player.Vision._prevObjects.Add(pj);
+            }
 
             if (spawnPacket.ObjectInfos.Count > 0)
-                gameObject.Session.Send(spawnPacket);
+                player.Session.Send(spawnPacket);
+
+            player.Vision.Update();
         }
         else if (gameObject.ObjectType == ObjectType.Monster)
         {
@@ -232,7 +241,7 @@ public partial class GameRoom : JobSerializer
 
         // 2. 상대방에게 내 퇴장 정보 전달
         var despawnPacket = new S2C_Despawn();
-        despawnPacket.ObjectId = objectId;
+        despawnPacket.ObjectIds.Add(objectId);
         BroadcastMessage(curCellPos!.Value, despawnPacket);
     }
 
@@ -263,19 +272,26 @@ public partial class GameRoom : JobSerializer
     public void BroadcastMessage(Vector2Int cellPos, IMessage message, int excludeId = -1)
     {
         List<Zone> adjacentZones = GetAdjacentZone(cellPos);
-        foreach (var zone in adjacentZones)
+        foreach (Player player in adjacentZones.SelectMany(zone => zone.Players))
         {
-            foreach (Player player in zone.Players)
-            {
-                if (player.ObjectId == excludeId)
-                    continue;
+            if (player.ObjectId == excludeId)
+                continue;
 
-                player.Session.Send(message);
-            }
+            int dx = player.CellPos.x - cellPos.x;
+            int dy = player.CellPos.y - cellPos.y;
+
+            // 나의 시야각 처리
+            if (Math.Abs(dx) > GameRoom.visionCells)
+                continue;
+
+            if (Math.Abs(dy) > GameRoom.visionCells)
+                continue;
+
+            player.Session.Send(message);
         }
     }
 
-    private List<Zone> GetAdjacentZone(Vector2Int cellPos, int cellRange = 5)
+    public List<Zone> GetAdjacentZone(Vector2Int cellPos, int cellRange = GameRoom.visionCells)
     {
         // 중복 제거
         HashSet<Zone> adjacentZone = new HashSet<Zone>();

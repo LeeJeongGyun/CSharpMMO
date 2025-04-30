@@ -125,11 +125,11 @@ public class GameObject
         {
             room.BroadcastMessage(CellPos, diePacket);
             room.LeaveRoom(ObjectType, ObjectId);
-            ResetPlayerInfo();
+            ResetObjectInfo();
             room.EnterRoom(this);
         }
 
-        void ResetPlayerInfo()
+        void ResetObjectInfo()
         {
             StatInfo.Hp = StatInfo.MaxHp;
             State = ObjectState.Idle;

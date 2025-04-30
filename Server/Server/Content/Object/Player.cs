@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Protocol;
 using Server.Content;
+using Server.Content.Room;
 using Server.Data;
 using Server.DB;
 
@@ -14,7 +15,10 @@ public class Player : GameObject
     public Player()
     {
         ObjectType = ObjectType.Player;
+        Vision = new VisionRange() { Owner = this };
     }
+
+    public VisionRange Vision { get; set; }
 
     public Inventory Inven { get; private set; } = new Inventory();
 
@@ -116,5 +120,13 @@ public class Player : GameObject
 
         AdditionalWeaponDamage = additionalWaeaponDamage;
         AdditionalArmorDefence = additionalArmorDefence;
+    }
+
+    protected override void OnDead(GameObject attacker)
+    {
+        if (Vision != null)
+            Vision.CancelJob();
+
+        base.OnDead(attacker);
     }
 }

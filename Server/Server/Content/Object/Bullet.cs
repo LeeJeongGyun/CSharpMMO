@@ -1,7 +1,7 @@
 ﻿namespace Server.Content.Object;
 
 using Protocol;
-using Server.Data;
+using Server.Content.Room;
 
 public class Bullet : Projectile
 {
@@ -14,10 +14,9 @@ public class Bullet : Projectile
         if (Room == null || Owner == null || SkillData == null || SkillData.projectile == null)
             return;
 
-        int speedToTick = (int)(1000 / SkillData.projectile.speed);
-        Room.PushAfter(Update, speedToTick);
-
+        Vector2Int curCellPos = CellPos;
         CellPos = GetFrontCellPos();
+
         if (Room.Map.FindCollision(CellPos))
         {
             Room.Push(Room.LeaveRoom, ObjectType.Projectile, ObjectId);
@@ -32,10 +31,23 @@ public class Bullet : Projectile
             return;
         }
 
+        // Zone 처리
+        Zone curZone = Room.GetZone(curCellPos);
+        Zone moveZone = Room.GetZone(CellPos);
+        if (curZone != moveZone)
+        {
+            curZone.Projectiles.Remove(this);
+            moveZone.Projectiles.Add(this);
+        }
+
         S2C_Move movePacket = new S2C_Move();
         movePacket.ObjectId = ObjectId;
         movePacket.PosInfo = PosInfo;
         Room.BroadcastMessage(CellPos, movePacket);
+
+        // Bullet이 사라졌음에도 계속 Update 호출되는 문제로 인하여 위치 이동
+        int speedToTick = (int)(1000 / SkillData.projectile.speed);
+        Room.PushAfter(Update, speedToTick);
     }
 
     public override GameObject GetOwner()

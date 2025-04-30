@@ -11,6 +11,9 @@ public class ObjectManager
 
     public void Add(ObjectInfo objectInfo, bool myPlayer = false)
     {
+        if (_objects.ContainsKey(objectInfo.ObjectId))
+            return;
+
         GameObject go;
         if (objectInfo.ObjectType == ObjectType.Player)
         {
@@ -49,9 +52,7 @@ public class ObjectManager
 
     public void Remove(int objectId)
     {
-        GameObject go = null;
-        _objects.TryGetValue(objectId, out go);
-        if (go != null)
+        if (_objects.TryGetValue(objectId, out GameObject go))
         {
             Managers.Resource.Destroy(go);
             _objects.Remove(objectId);
