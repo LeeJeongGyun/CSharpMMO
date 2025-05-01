@@ -131,7 +131,7 @@ public class Monster : GameObject
             return;
         }
 
-        List<Vector2Int> paths = Room.Map.FindPath(CellPos, _target.CellPos);
+        List<Vector2Int> paths = Room.Map.FindPath(CellPos, _target.CellPos, checkObject: true);
         if (paths.Count < 2 || paths.Count > _chaseDistance)
         {
             _target = null;

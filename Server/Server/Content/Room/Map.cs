@@ -205,7 +205,7 @@ public class Map
     private int[] _deltaX = new int[] { 0, 0, -1, 1 };
     private int[] _cost = new int[] { 10, 10, 10, 10 };
 
-    public List<Vector2Int> FindPath(Vector2Int startCellPos, Vector2Int destCellPos, bool checkObject = false)
+    public List<Vector2Int> FindPath(Vector2Int startCellPos, Vector2Int destCellPos, bool checkObject = false, int maxDist = 10)
     {
         // 점수 매기기
         // F = G + H
@@ -214,8 +214,7 @@ public class Map
         // H = 목적지에서 얼마나 가까운지 (작을 수록 좋음, 고정)
 
         // (y, x) 이미 방문했는지 여부 (방문 = closed 상태)
-        //bool[,] closed = new bool[SizeY, SizeX]; // CloseList
-        var closedList = new HashSet<Pos>();
+        var closedList = new HashSet<Pos>(); // CloseList
 
         // (y, x) 가는 길을 한 번이라도 발견했는지
         // 발견X => MaxValue
@@ -227,7 +226,6 @@ public class Map
 
         var openList = new Dictionary<Pos, int>(); // OpenList
 
-        // Pos[,] parent = new Pos[SizeY, SizeX];
         var parent = new Dictionary<Pos, Pos>();
 
         // 오픈리스트에 있는 정보들 중에서, 가장 좋은 후보를 빠르게 뽑아오기 위한 도구
@@ -262,6 +260,10 @@ public class Map
             for (int i = 0; i < _deltaY.Length; i++)
             {
                 var next = new Pos(node.Y + _deltaY[i], node.X + _deltaX[i]);
+
+                // 너무 멀면 Skip
+                if (Math.Abs(pos.Y - next.Y) + Math.Abs(pos.X - next.X) > maxDist)
+                    continue;
 
                 // 유효 범위를 벗어났으면 스킵
                 // 벽으로 막혀서 갈 수 없으면 스킵
@@ -302,6 +304,25 @@ public class Map
     private List<Vector2Int> CalcCellPathFromParent(Dictionary<Pos, Pos> parent, Pos dest)
     {
         var cells = new List<Vector2Int>();
+
+        // 길을 못찾을 경우 예외 처리
+        if (parent.ContainsKey(dest) == false)
+        {
+            Pos bestPos = new Pos();
+            int bestDist = int.MaxValue;
+
+            foreach (Pos posKey in parent.Keys)
+            {
+                int dist = Math.Abs(dest.Y - posKey.Y) + Math.Abs(dest.X - posKey.X);
+                if (dist < bestDist)
+                {
+                    bestDist = dist;
+                    bestPos = posKey;
+                }
+            }
+
+            dest = bestPos;
+        }
 
         Pos pos = dest;
         while (parent[pos] != pos)
