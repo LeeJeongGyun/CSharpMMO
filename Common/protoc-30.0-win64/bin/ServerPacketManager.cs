@@ -48,7 +48,8 @@ internal class ServerPacketManager
 		_packetHandlerMap.Add((ushort)PacketID.C2SLogin, PacketHandler.C2S_LoginHandler);_makePacketMap.Add((ushort)PacketID.C2SEnterRoom, MakePacket<C2S_EnterRoom>);
 		_packetHandlerMap.Add((ushort)PacketID.C2SEnterRoom, PacketHandler.C2S_EnterRoomHandler);_makePacketMap.Add((ushort)PacketID.C2SCreatePlayer, MakePacket<C2S_CreatePlayer>);
 		_packetHandlerMap.Add((ushort)PacketID.C2SCreatePlayer, PacketHandler.C2S_CreatePlayerHandler);_makePacketMap.Add((ushort)PacketID.C2SEquipItem, MakePacket<C2S_EquipItem>);
-		_packetHandlerMap.Add((ushort)PacketID.C2SEquipItem, PacketHandler.C2S_EquipItemHandler);
+		_packetHandlerMap.Add((ushort)PacketID.C2SEquipItem, PacketHandler.C2S_EquipItemHandler);_makePacketMap.Add((ushort)PacketID.C2SPong, MakePacket<C2S_Pong>);
+		_packetHandlerMap.Add((ushort)PacketID.C2SPong, PacketHandler.C2S_PongHandler);
     }
 
     // Unity에서만 사용

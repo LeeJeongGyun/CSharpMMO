@@ -39,8 +39,9 @@ public partial class GameRoom : JobSerializer
                 Zones[y, x] = new Zone() { IndexY = y, IndexX = x };
             }
         }
+
         // Temp
-        GenerateMonsterAI(1);
+        GenerateMonsterAI(10);
     }
 
     public Zone[,] Zones { get; private set; }
