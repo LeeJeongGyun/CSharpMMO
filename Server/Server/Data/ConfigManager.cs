@@ -6,6 +6,7 @@ public class ServerConfig
 {
     public string dataPath;
     public string dbConnectionString;
+    public long timeoutTick;
 }
 
 public class ConfigManager

@@ -99,7 +99,8 @@ public class PacketHandler
         Debug.Log($"S2C_ConntectedHandler");
 
         C2S_Login loginPacket = new C2S_Login();
-        loginPacket.UniqueId = SystemInfo.deviceUniqueIdentifier;
+        string path = Application.dataPath;
+        loginPacket.UniqueId = path.GetHashCode().ToString();
         Managers.Network.Send(loginPacket);
     }
 
@@ -202,5 +203,12 @@ public class PacketHandler
         UI_GameScene gameScene = Managers.UI.SceneUI as UI_GameScene;
         gameScene.InvenUI.RefreshUI();
         gameScene.StatUI.RefreshUI();
+    }
+
+    public static void S2C_PingHandler(PacketSession session, IMessage message)
+    {
+        Debug.Log("S2C_PingHandler");
+        C2S_Pong pongPacket = new C2S_Pong();
+        Managers.Network.Send(pongPacket);
     }
 }

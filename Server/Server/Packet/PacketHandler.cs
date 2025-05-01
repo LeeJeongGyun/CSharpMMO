@@ -6,6 +6,7 @@ using Server.Content.Object;
 using Server.DB;
 using ServerCore;
 using System;
+using System.Diagnostics;
 
 internal class PacketHandler
 {
@@ -109,5 +110,14 @@ internal class PacketHandler
             return;
 
         room.Push(room.ApplyEquipItem, player, equipItemPacket);
+    }
+
+    public static void C2S_PongHandler(PacketSession session, IMessage message)
+    {
+        ClientSession? clientSession = session as ClientSession;
+        if (clientSession == null)
+            return;
+
+        clientSession.HandlePongPacket();
     }
 }

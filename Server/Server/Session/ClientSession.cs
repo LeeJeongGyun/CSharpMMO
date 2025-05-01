@@ -17,10 +17,32 @@ public partial class ClientSession : PacketSession
     public static int recvCount = 0;
     public static int sessionId = 1;
     private object _lock = new object();
+    private long _curTick = 0;
+
     public PlayerServerState PlayerServerState { get; private set; } = PlayerServerState.PlayerStateLogin;
     public int SessionId { get; set; }
     public int ObjectId { get; private set; } = 0;
     public List<ArraySegment<byte>> _pendingList { get; private set; } = new List<ArraySegment<byte>>();
+
+    public void SendPingPacket()
+    {
+        if (_curTick != 0)
+        {
+            long deltaTick = Environment.TickCount64 - _curTick;
+            if (deltaTick > ConfigManager.Config.timeoutTick)
+            {
+                Console.WriteLine("Ping Disconnected");
+                Disconnect();
+                return;
+            }
+        }
+
+        S2C_Ping pingPacket = new S2C_Ping();
+        Send(pingPacket);
+        GameLogic.Instance.PushAfter(SendPingPacket, 3000);
+    }
+
+    public void HandlePongPacket() => _curTick = Environment.TickCount64;
 
     /// <summary>
     /// 얘약만 하고 실제 송신은 SendThread가 FlushSend 함수를 호출하여 진행한다.
@@ -53,6 +75,9 @@ public partial class ClientSession : PacketSession
 
         S2C_Connected connectedPacket = new S2C_Connected();
         Send(connectedPacket);
+
+        // Ping/Pong 시작
+        SendPingPacket();
     }
 
     public override void OnDisconnected(EndPoint? endPoint)
