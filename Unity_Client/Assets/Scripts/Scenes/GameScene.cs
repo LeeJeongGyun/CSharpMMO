@@ -17,7 +17,7 @@ public class GameScene : BaseScene
         SceneType = Define.Scene.Game;
         Managers.Map.LoadMap(1);
 
-        Screen.SetResolution(600, 400, false);
+        Screen.SetResolution(800, 600, false);
 
         SceneUI = Managers.UI.ShowSceneUI<UI_GameScene>();
     }
