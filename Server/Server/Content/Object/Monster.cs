@@ -1,5 +1,6 @@
 ﻿namespace Server.Content.Object;
 
+using System.Threading;
 using Protocol;
 using Server.Content.Job;
 using Server.Content.Room;
@@ -38,6 +39,8 @@ public class Monster : GameObject
         StatInfo.MergeFrom(monsterData.statInfo);
         StatInfo.Hp = monsterData.statInfo.MaxHp;
         State = ObjectState.Idle;
+        Dir = MoveDir.Down;
+        CellPos = new Vector2Int(0, 0);
     }
 
     // FSM 적용

@@ -72,7 +72,7 @@ public class GameObject
     // Bullet와 같은 Projectile은 Map에 등록을 하지 않아 충돌되지 않음
     public virtual void OnDamaged(GameObject attacker, int damaged)
     {
-        int totalDamaged = (TotalDamage + damaged) - TotalDefence;
+        int totalDamaged = (attacker.TotalDamage + damaged) - TotalDefence;
         totalDamaged = Math.Max(totalDamaged, 0);
         StatInfo.Hp = Math.Max(StatInfo.Hp - totalDamaged, 0);
 

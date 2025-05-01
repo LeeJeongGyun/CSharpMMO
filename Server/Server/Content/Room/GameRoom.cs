@@ -316,20 +316,11 @@ public partial class GameRoom : JobSerializer
 
     private void GenerateMonsterAI(int monsterCount)
     {
-        // TODO 몬스터 임시 세팅 수정
         for (int i = 0; i < monsterCount; ++i)
         {
             Monster monster = ObjectManager.Instance.AddObject<Monster>();
             monster.Init(1);
-            monster.State = ObjectState.Idle;
-            monster.Dir = MoveDir.Down;
-            monster.CellPos = new Vector2Int(0, 0);
             monster.Room = this;
-
-            DataManager.Stats.TryGetValue(1, out StatInfo? statData);
-            if (statData != null)
-                monster.StatInfo.MergeFrom(statData);
-
             EnterRoom(monster);
         }
     }
