@@ -44,6 +44,12 @@ internal class Program
         foreach (var thread in _threads)
             thread.Start();
 
+        while (true)
+        {
+            Console.WriteLine($"SessionCount: {SessionManager.Instance.GetSessionCount()}");
+            Thread.Sleep(1000);
+        }
+
         foreach (var thread in _threads)
             thread.Join();
     }

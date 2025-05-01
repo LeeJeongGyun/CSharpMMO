@@ -85,19 +85,18 @@ public partial class ClientSession : PacketSession
         Interlocked.Increment(ref disConnectCount);
         Console.WriteLine($"[SERVER] ClientSession Disconnected: {endPoint}");
 
+        // 1. SessionManager 삭제
+        SessionManager.Instance.Remove(SessionId);
+
         Player? player = ObjectManager.Instance.FindPlayer(ObjectId);
         if (player != null)
         {
-            // 1. 현재 있는 방에서 퇴장
-            // TODO Command 패턴으로 바뀌면서 내부에서 Null Crash 발생 가능성 존재.
+            // 2. 현재 있는 방에서 퇴장
             player.Room?.Push(player.Room.LeaveRoom, player.ObjectType, ObjectId);
 
-            // 2. PlayerManager 삭제
+            // 3. PlayerManager 삭제
             ObjectManager.Instance.RemovePlayer(ObjectId);
             ObjectId = 0;
-
-            // 3. SessionManager 삭제
-            SessionManager.Instance.Remove(SessionId);
         }
     }
 

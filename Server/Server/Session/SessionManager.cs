@@ -47,4 +47,6 @@ public class SessionManager
 
         return null;
     }
+
+    public int GetSessionCount() => _sessions.Count;
 }

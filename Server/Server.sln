@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DummyClient", "DummyClient\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerCore", "ServerCore\ServerCore.csproj", "{E963BC84-A6E0-4D8B-9E54-8823D28AFB08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PacketGenerator", "PacketGenerator\PacketGenerator.csproj", "{9EE21819-00F1-4CEF-8DE2-4E20DDB13E0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PacketGenerator", "PacketGenerator\PacketGenerator.csproj", "{9EE21819-00F1-4CEF-8DE2-4E20DDB13E0B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{B5D9F7BE-BD70-4B5D-A5F8-20371C06E309}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DummyTest", "DummyTest\DummyTest.csproj", "{50B669E5-774C-4546-8573-27A9C9FCAD0F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{9EE21819-00F1-4CEF-8DE2-4E20DDB13E0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9EE21819-00F1-4CEF-8DE2-4E20DDB13E0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9EE21819-00F1-4CEF-8DE2-4E20DDB13E0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50B669E5-774C-4546-8573-27A9C9FCAD0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50B669E5-774C-4546-8573-27A9C9FCAD0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50B669E5-774C-4546-8573-27A9C9FCAD0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50B669E5-774C-4546-8573-27A9C9FCAD0F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
