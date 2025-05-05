@@ -76,7 +76,7 @@ public partial class ClientSession : PacketSession
         {
             _pendingList.Add(packetBuffer);
             // 모아보내기
-            _accumulatedSendBytes += packetBuffer.Length;
+            //_accumulatedSendBytes += packetBuffer.Length;
         }
     }
 
@@ -130,16 +130,16 @@ public partial class ClientSession : PacketSession
             return;
 
         // 0.1초가 지났거나 || 10,000byte가 모였을 때 전송
-        long deltaTick = Environment.TickCount64 - _prevSendTick;
-        if (deltaTick < 100 && _accumulatedSendBytes < 10_000)
-            return;
+        //long deltaTick = Environment.TickCount64 - _prevSendTick;
+        //if (deltaTick < 100 && _accumulatedSendBytes < 10_000)
+        //return;
 
         List<ArraySegment<byte>> pendingListRef;
         lock (_lock)
         {
             // 모아보내기 초기화
-            _prevSendTick = Environment.TickCount64;
-            _accumulatedSendBytes = 0;
+            //_prevSendTick = Environment.TickCount64;
+            //_accumulatedSendBytes = 0;
 
             pendingListRef = _pendingList;
             _pendingList = new List<ArraySegment<byte>>();

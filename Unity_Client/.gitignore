@@ -66,6 +66,7 @@ crashlytics-build.properties
 Assets/COPY SPRIGHT/
 Assets/COPY SPRIGHT.meta
 Assets/ThirdParty/
+Assets/Unity UI Samples/
 
 # Exclude Test Builds File
 TestBuilds/
