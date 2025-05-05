@@ -27,7 +27,7 @@ public class NetworkManager
         _session.Send(packetBuffer);
     }
 
-    public void Init()
+    public void ConnectToGameServer()
     {
         ClientPacketManager.Instance.CustomHandler += (id, message) => PacketQueue.Instance.Enqueue(id, message);
         // 소켓 생성

@@ -20,22 +20,5 @@ public class GameScene : BaseScene
         Screen.SetResolution(800, 600, false);
 
         SceneUI = Managers.UI.ShowSceneUI<UI_GameScene>();
-
-        // Web Packet Test
-        CreateAccountReq createAccountReq = new CreateAccountReq();
-        createAccountReq.AccountName = "LEEJK";
-        createAccountReq.Password = "1234";
-        Managers.Web.SendWebReqPacket<CreateAccountRes>("create", createAccountReq, _ =>
-        {
-            Debug.Log($"CreateAccount Success");
-        });
-
-        LoginAccountReq loginAccountReq = new LoginAccountReq();
-        loginAccountReq.AccountName = "LEEJK";
-        loginAccountReq.Password = "1234";
-        Managers.Web.SendWebReqPacket<LoginAccountRes>("login", loginAccountReq, _ =>
-        {
-            Debug.Log($"LoginAccount Success");
-        });
     }
 }
