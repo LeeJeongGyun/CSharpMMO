@@ -1,11 +1,12 @@
 ﻿using ServerCore;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Managers : MonoBehaviour
 {
     private static Managers s_instance; // 유일성이 보장된다
 
-    private static Managers Instance
+    public static Managers Instance
     { get { Init(); return s_instance; } } // 유일한 매니저를 갖고온다
 
     #region Contents
@@ -14,12 +15,15 @@ public class Managers : MonoBehaviour
     private ObjectManager _object = new ObjectManager();
     private NetworkManager _network = new NetworkManager();
     private InventoryManager _inventory = new InventoryManager();
+    private WebManager _web = new WebManager();
     public static MapManager Map => Instance._map;
     public static ObjectManager Object => Instance._object;
 
     public static NetworkManager Network => Instance._network;
 
     public static InventoryManager Inven => Instance._inventory;
+
+    public static WebManager Web => Instance._web;
 
     #endregion Contents
 
