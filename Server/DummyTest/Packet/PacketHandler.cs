@@ -51,16 +51,40 @@ public class PacketHandler
 
     public static void S2C_ConnectedHandler(PacketSession session, IMessage message)
     {
+        ServerSession serverSession = (ServerSession)session;
+
+        C2S_Login loginPacket = new C2S_Login();
+        loginPacket.UniqueId = $"Dummy_{serverSession.DummyId}";
+        serverSession.Send(loginPacket);
     }
 
     public static void S2C_LoginHandler(PacketSession session, IMessage message)
     {
+        ServerSession serverSession = (ServerSession)session;
         S2C_Login loginPacket = message as S2C_Login;
+
+        if (loginPacket.PlayerInfos.Count == 0)
+        {
+            C2S_CreatePlayer createPlayerPacket = new C2S_CreatePlayer();
+            createPlayerPacket.Name = $"Dummy_{serverSession.DummyId.ToString("0000")}";
+            serverSession.Send(createPlayerPacket);
+        }
+        else
+        {
+            C2S_EnterRoom enterRoomPacket = new C2S_EnterRoom();
+            enterRoomPacket.Name = loginPacket.PlayerInfos[0].Name;
+            serverSession.Send(enterRoomPacket);
+        }
     }
 
     public static void S2C_CreatePlayerHandler(PacketSession session, IMessage message)
     {
+        ServerSession serverSession = (ServerSession)session;
         S2C_CreatePlayer createPlayer = message as S2C_CreatePlayer;
+
+        C2S_EnterRoom enterRoomPacket = new C2S_EnterRoom();
+        enterRoomPacket.Name = createPlayer.PlayerInfo.Name;
+        serverSession.Send(enterRoomPacket);
     }
 
     public static void S2C_ItemListHandler(PacketSession session, IMessage message)
@@ -80,5 +104,8 @@ public class PacketHandler
 
     public static void S2C_PingHandler(PacketSession session, IMessage message)
     {
+        ServerSession serverSession = (ServerSession)session;
+        C2S_Pong pongPacket = new C2S_Pong();
+        serverSession.Send(pongPacket);
     }
 }

@@ -41,7 +41,7 @@ public partial class GameRoom : JobSerializer
         }
 
         // Temp
-        GenerateMonsterAI(10);
+        GenerateMonsterAI(1000);
     }
 
     public Zone[,] Zones { get; private set; }
@@ -49,6 +49,8 @@ public partial class GameRoom : JobSerializer
     public int Id { get; init; }
 
     public Map Map => _map;
+
+    public int JobCount => GetJobCount();
 
     public Zone? GetZone(Vector2Int cellPos)
     {
@@ -296,14 +298,16 @@ public partial class GameRoom : JobSerializer
     {
         // 중복 제거
         HashSet<Zone> adjacentZone = new HashSet<Zone>();
-        int[] delta = { -cellRange, +cellRange };
-        foreach (int dy in delta)
-        {
-            foreach (int dx in delta)
-            {
-                int y = cellPos.y + dy;
-                int x = cellPos.x + dx;
 
+        int yMin, yMax, xMin, xMax;
+        yMin = cellPos.y - cellRange;
+        yMax = cellPos.y + cellRange;
+        xMin = cellPos.x - cellRange;
+        xMax = cellPos.x + cellRange;
+        for (int y = yMin; y <= yMax; ++y)
+        {
+            for (int x = xMin; x <= xMax; ++x)
+            {
                 Zone? zone = GetZone(new Vector2Int(x, y));
                 if (zone == null)
                     continue;

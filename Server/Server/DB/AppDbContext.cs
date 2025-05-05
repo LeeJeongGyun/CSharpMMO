@@ -22,7 +22,7 @@ public class AppDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
         options
-            .UseLoggerFactory(_logger)
+            //.UseLoggerFactory(_logger)
             .UseSqlServer(ConfigManager.Config == null ? _connectionString : ConfigManager.Config.dbConnectionString);
     }
 

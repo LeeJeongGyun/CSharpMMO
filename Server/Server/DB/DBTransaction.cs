@@ -13,6 +13,8 @@ public partial class DBTransaction : JobSerializer
 {
     public static DBTransaction Instance { get; } = new DBTransaction();
 
+    public int JobCount => GetJobCount();
+
     public static void SavePlayerStatInfo(Player player, GameRoom? room)
     {
         if (player == null || room == null)
@@ -39,7 +41,7 @@ public partial class DBTransaction : JobSerializer
                     room.Push(() =>
                     {
                         // 작업이 완료되었을 때 처리해야 될 일감
-                        Console.WriteLine($"Saved Hp: {playerDb.StatInfo.Hp}");
+                        //Console.WriteLine($"Saved Hp: {playerDb.StatInfo.Hp}");
                     });
                 }
             }

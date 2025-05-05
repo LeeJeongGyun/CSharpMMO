@@ -86,8 +86,6 @@ public class GameObject
             OnDead(attacker);
             return;
         }
-
-        Console.WriteLine($"{ObjectId} is Damaged, Hp: {StatInfo.Hp}");
     }
 
     public Vector2Int GetFrontCellPos() => Dir switch

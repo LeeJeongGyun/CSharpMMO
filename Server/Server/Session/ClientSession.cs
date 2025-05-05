@@ -17,7 +17,14 @@ public partial class ClientSession : PacketSession
     public static int recvCount = 0;
     public static int sessionId = 1;
     private object _lock = new object();
-    private long _curTick = 0;
+
+    // Ping Packet Tick 체크
+    private long _pingTick = 0;
+
+    // Packet을 모아보내기 위해 존재
+    private long _prevSendTick;
+
+    private long _accumulatedSendBytes = 0;
 
     public PlayerServerState PlayerServerState { get; private set; } = PlayerServerState.PlayerStateLogin;
     public int SessionId { get; set; }
@@ -26,9 +33,9 @@ public partial class ClientSession : PacketSession
 
     public void SendPingPacket()
     {
-        if (_curTick != 0)
+        if (_pingTick != 0)
         {
-            long deltaTick = Environment.TickCount64 - _curTick;
+            long deltaTick = Environment.TickCount64 - _pingTick;
             if (deltaTick > ConfigManager.Config.timeoutTick)
             {
                 Console.WriteLine("Ping Disconnected");
@@ -42,7 +49,7 @@ public partial class ClientSession : PacketSession
         GameLogic.Instance.PushAfter(SendPingPacket, 3000);
     }
 
-    public void HandlePongPacket() => _curTick = Environment.TickCount64;
+    public void HandlePongPacket() => _pingTick = Environment.TickCount64;
 
     /// <summary>
     /// 얘약만 하고 실제 송신은 SendThread가 FlushSend 함수를 호출하여 진행한다.
@@ -63,9 +70,14 @@ public partial class ClientSession : PacketSession
         BitConverter.TryWriteBytes(span.Slice(sizeof(ushort)), (ushort)packetId);
         Array.Copy(packet.ToByteArray(), 0, packetBuffer, 4, dataSize);
 
-        // Send(packetBuffer);
+        //Send(packetBuffer);
+
         lock (_lock)
+        {
             _pendingList.Add(packetBuffer);
+            // 모아보내기
+            _accumulatedSendBytes += packetBuffer.Length;
+        }
     }
 
     public override void OnConnected(EndPoint? endPoint)
@@ -117,9 +129,18 @@ public partial class ClientSession : PacketSession
         if (_pendingList.Count == 0)
             return;
 
+        // 0.1초가 지났거나 || 10,000byte가 모였을 때 전송
+        long deltaTick = Environment.TickCount64 - _prevSendTick;
+        if (deltaTick < 100 && _accumulatedSendBytes < 10_000)
+            return;
+
         List<ArraySegment<byte>> pendingListRef;
         lock (_lock)
         {
+            // 모아보내기 초기화
+            _prevSendTick = Environment.TickCount64;
+            _accumulatedSendBytes = 0;
+
             pendingListRef = _pendingList;
             _pendingList = new List<ArraySegment<byte>>();
         }

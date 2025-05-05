@@ -49,4 +49,6 @@ public class JobSerializer
         foreach (IJob job in jobs)
             job.Execute();
     }
+
+    public int GetJobCount() => _jobs.Count();
 }

@@ -47,6 +47,9 @@ internal class Program
         while (true)
         {
             Console.WriteLine($"SessionCount: {SessionManager.Instance.GetSessionCount()}");
+            Console.WriteLine($"DBJobCount: {DBTransaction.Instance.JobCount}");
+            Console.WriteLine($"GameLogicJobCount: {GameLogic.Instance.JobCount}");
+            Console.WriteLine($"GameRoomJobCount: {GameLogic.Instance.FindRoom(1)?.JobCount}");
             Thread.Sleep(1000);
         }
 

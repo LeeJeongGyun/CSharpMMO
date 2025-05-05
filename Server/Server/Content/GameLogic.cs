@@ -18,6 +18,8 @@ internal class GameLogic : JobSerializer
     private Dictionary<int, GameRoom> _rooms = new Dictionary<int, GameRoom>();
     private int _roomId = 1;
 
+    public int JobCount => GetJobCount();
+
     public GameRoom AddRoom()
     {
         GameRoom room = new GameRoom(10) { Id = _roomId++ };
