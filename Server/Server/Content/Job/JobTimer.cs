@@ -4,10 +4,10 @@ using ServerCore;
 
 public struct JobTimerElem : IComparable<JobTimerElem>
 {
-    public int execTick;
+    public long execTick;
     public IJob job;
 
-    public int CompareTo(JobTimerElem other) => other.execTick - execTick;
+    public int CompareTo(JobTimerElem other) => other.execTick.CompareTo(execTick);
 }
 
 public class JobTimer
@@ -18,7 +18,7 @@ public class JobTimer
     public void Push(IJob job, int tickAfter = 0)
     {
         JobTimerElem jobElem;
-        jobElem.execTick = (int)Environment.TickCount64 + tickAfter;
+        jobElem.execTick = Environment.TickCount64 + tickAfter;
         jobElem.job = job;
 
         lock (_lock)
