@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CloudStructures" Version="3.4.1" />
     <PackageReference Include="Google.Protobuf" Version="3.30.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.4">
@@ -20,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ServerCore\ServerCore.csproj" />
+    <ProjectReference Include="..\SharedRedisData\CommonRedisDataModel.csproj" />
   </ItemGroup>
 
 </Project>
