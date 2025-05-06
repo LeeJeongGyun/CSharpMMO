@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -9,7 +10,8 @@ public class WebManager
 {
     private string BaseUrl { get; set; } = "https://localhost:7264/api/Account";
 
-    public void SendWebReqPacket<T>(string url, object data, Action<T> callback) => Managers.Instance.StartCoroutine(CoSendWebPacket<T>(url, "post", data, callback));
+    public void SendWebReqPacket<T>(string url, object data, Action<T> callback)
+        => Managers.Instance.StartCoroutine(CoSendWebPacket<T>(url, "post", data, callback));
 
     private IEnumerator CoSendWebPacket<T>(string url, string method, object data, Action<T> callback)
     {
@@ -18,7 +20,7 @@ public class WebManager
         byte[] jsonBytes = null;
         if (data != null)
         {
-            string jsonData = JsonUtility.ToJson(data);
+            string jsonData = JsonConvert.SerializeObject(data);
             jsonBytes = Encoding.UTF8.GetBytes(jsonData);
         }
 
@@ -38,7 +40,7 @@ public class WebManager
                 Debug.Log($"WebPacket Success");
                 if (callback != null)
                 {
-                    T resData = JsonUtility.FromJson<T>(webRequest.downloadHandler.text);
+                    T resData = JsonConvert.DeserializeObject<T>(webRequest.downloadHandler.text);
                     callback.Invoke(resData);
                 }
             }
