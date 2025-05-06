@@ -2,11 +2,14 @@
 using System.Net.Sockets;
 using System.Threading;
 using System.Timers;
+using CloudStructures;
+using CloudStructures.Structures;
 using Server.Content;
 using Server.Data;
 using Server.DB;
 using Server.Session;
 using ServerCore;
+using SharedRedisData.Redis;
 
 namespace Server;
 
@@ -39,6 +42,7 @@ internal class Program
         _threads.Add(new Thread(GameLogicThread) { Name = "GameLogicThread" });
         _threads.Add(new Thread(DbThread) { Name = "DbThread" });
         _threads.Add(new Thread(SendThread) { Name = "SendThread" });
+        _threads.Add(new Thread(RedisThread) { Name = "RedisThread" });
         Thread.CurrentThread.Name = "MainThread";
 
         foreach (var thread in _threads)
@@ -108,6 +112,35 @@ internal class Program
                 session.FlushSend();
 
             Thread.Sleep(0);
+        }
+    }
+
+    /// <summary>
+    /// Redis에 서버 혼잡도 저장을 담당할 스레드
+    /// </summary>
+    /// <param name="_"></param>
+    /// <remarks>
+    /// 100ms에 한번씩 갱신
+    /// </remarks>
+    private static async void RedisThread(object? _)
+    {
+        // 현재는 서버가 하나라 간단하게 작성
+        RedisServerInfo serverInfo = new RedisServerInfo()
+        {
+            Name = "스카니아",
+            Ip = "127.0.0.1",
+            Port = 7777,
+        };
+
+        while (true)
+        {
+            var redisServerInfos = new RedisDictionary<string, RedisServerInfo>(RedisInfo.Connection, "ServerInfos", null);
+
+            // 여러 서버가 존재한다면 수정이 필요.
+            serverInfo.ServerLoad = SessionManager.Instance.GetSessionCount();
+            await redisServerInfos.SetAsync(serverInfo.Name, serverInfo);
+
+            Thread.Sleep(100);
         }
     }
 }

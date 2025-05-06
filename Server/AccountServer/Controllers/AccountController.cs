@@ -1,9 +1,12 @@
 ﻿namespace AccountServer.Controllers;
 
 using AccountServer.DB;
+using CloudStructures.Structures;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SharedRedisData.Redis;
+using StackExchange.Redis;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -44,7 +47,7 @@ public class AccountController : ControllerBase
 
     [HttpPost]
     [Route("login")]
-    public LoginAccountRes LoginAccount([FromBody] LoginAccountReq loginReqPacket)
+    public async Task<LoginAccountRes> LoginAccount([FromBody] LoginAccountReq loginReqPacket)
     {
         LoginAccountRes loginAccountRes = new LoginAccountRes();
 
@@ -60,8 +63,34 @@ public class AccountController : ControllerBase
         else
         {
             loginAccountRes.Result = true;
-            loginAccountRes.ServerInfos.Add(new ServerInfo() { Name = "스카니아", Ip = "127.0.0.1" });
-            loginAccountRes.ServerInfos.Add(new ServerInfo() { Name = "제니스", Ip = "127.0.0.1" });
+
+            // User Login 랜덤 토큰 생성
+            int userToken = Random.Shared.Next(int.MinValue, int.MaxValue);
+
+            // User Token Redis 저장
+            TimeSpan expiredTime = TimeSpan.FromSeconds(10);
+            var redisUserToken = new RedisDictionary<int, int>(RedisInfo.Connection, "UserToken", expiredTime);
+            await redisUserToken.SetAsync(account.AccountDbId, userToken);
+
+            loginAccountRes.AccountDbId = account.AccountDbId;
+            loginAccountRes.UserToken = userToken;
+
+            // Redis에서 서버 정보 확인 후 클라이언트에게 리턴
+            var redisServerInfo = new RedisDictionary<string, RedisServerInfo>(RedisInfo.Connection, "ServerInfos", null);
+            var serverInfos = await redisServerInfo.GetAllAsync();
+            if (serverInfos != null)
+            {
+                foreach (RedisServerInfo info in serverInfos.Values)
+                {
+                    loginAccountRes.ServerInfos.Add(new ServerInfo()
+                    {
+                        Name = info.Name,
+                        Ip = info.Ip,
+                        Port = info.Port,
+                        ServerLoad = info.ServerLoad
+                    });
+                }
+            }
         }
 
         return loginAccountRes;

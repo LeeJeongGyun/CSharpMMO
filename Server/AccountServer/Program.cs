@@ -1,6 +1,7 @@
 ﻿namespace AccountServer
 {
     using AccountServer.DB;
+    using CloudStructures;
     using Microsoft.EntityFrameworkCore;
 
     public class Program

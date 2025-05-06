@@ -21,10 +21,14 @@ public class ServerInfo
 {
     public string Name;
     public string Ip;
+    public int Port;
+    public int ServerLoad;
 }
 
 public class LoginAccountRes
 {
     public bool Result;
+    public int AccountDbId;
+    public int UserToken;
     public List<ServerInfo> ServerInfos = new List<ServerInfo>();
 }
