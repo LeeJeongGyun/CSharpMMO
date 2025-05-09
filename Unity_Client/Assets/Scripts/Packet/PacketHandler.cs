@@ -101,6 +101,8 @@ public class PacketHandler
         C2S_Login loginPacket = new C2S_Login();
         string path = Application.dataPath;
         loginPacket.UniqueId = path.GetHashCode().ToString();
+        loginPacket.AccountDbId = Managers.Network.AccountDbId;
+        loginPacket.UserToken = Managers.Network.UserToken;
         Managers.Network.Send(loginPacket);
     }
 

@@ -10,6 +10,8 @@ using UnityEngine;
 public class NetworkManager
 {
     private ServerSession _session = new ServerSession();
+    public int AccountDbId { get; set; }
+    public int UserToken { get; set; }
 
     public void Send(IMessage packet)
     {
@@ -27,13 +29,12 @@ public class NetworkManager
         _session.Send(packetBuffer);
     }
 
-    public void ConnectToGameServer()
+    public void ConnectToGameServer(string ip, int port)
     {
         ClientPacketManager.Instance.CustomHandler += (id, message) => PacketQueue.Instance.Enqueue(id, message);
+
         // 소켓 생성
-        string hostName = Dns.GetHostName();
-        IPHostEntry hostEntry = Dns.GetHostEntry(hostName);
-        IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 7777);
+        IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse(ip), port);
 
         Connector connector = new Connector(() => _session);
         connector.Connect(endPoint);

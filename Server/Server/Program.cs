@@ -140,7 +140,7 @@ internal class Program
             serverInfo.ServerLoad = SessionManager.Instance.GetSessionCount();
             await redisServerInfos.SetAsync(serverInfo.Name, serverInfo);
 
-            Thread.Sleep(100);
+            Thread.Sleep(10000);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿namespace Server;
 
 using System.Runtime.Serialization;
+using CloudStructures.Structures;
 using Microsoft.EntityFrameworkCore;
 using Protocol;
 using Server.Content;
@@ -9,21 +10,27 @@ using Server.Data;
 using Server.DB;
 using Server.Utils;
 using ServerCore;
+using SharedRedisData.Redis;
 
 public partial class ClientSession : PacketSession
 {
     public int AccountDbId { get; private set; }
     public List<LobbyPlayerInfo> LobbyPlayerInfos { get; private set; } = new List<LobbyPlayerInfo>();
 
-    public void HandleLogin(C2S_Login loginPacket)
+    public async Task HandleLogin(C2S_Login loginPacket)
     {
+        // DummyTest용 Client는 Redis 검사 진행하지 않는다.
+        bool dummyClient = loginPacket.UniqueId.Contains("Dummy");
+        bool result = await CheckValidUserToken(loginPacket.AccountDbId, loginPacket.UserToken);
+        if (result == false && dummyClient == false)
+            return;
+
         // Login 상태가 아니면 뭔가 이상하다..
         if (PlayerServerState != PlayerServerState.PlayerStateLogin)
             return;
 
         LobbyPlayerInfos.Clear();
 
-        // TODO 문제가 존재
         S2C_Login loginPacketRes = new S2C_Login();
         using (AppDbContext db = new AppDbContext())
         {
@@ -35,7 +42,7 @@ public partial class ClientSession : PacketSession
             {
                 account = new AccountDb() { AccountName = loginPacket.UniqueId };
                 db.Accounts.Add(account);
-                bool success = db.SaveChangesEx(); // TODO : 동시에 서로 다른 유저에서 같은 UniqueId온다면.. Exception 처리 필요
+                bool success = db.SaveChangesEx();
             }
             else
             {
@@ -164,7 +171,7 @@ public partial class ClientSession : PacketSession
             };
 
             db.Players.Add(newPlayer);
-            db.SaveChangesEx(); // TODO Exception Handling, 이름 중복이라면..
+            db.SaveChangesEx();
 
             LobbyPlayerInfo playerInfo = new LobbyPlayerInfo() { StatInfo = new StatInfo() };
             playerInfo.PlayerDbId = newPlayer.PlayerDbId;
@@ -177,5 +184,15 @@ public partial class ClientSession : PacketSession
             createPlayerRes.PlayerInfo = playerInfo;
             Send(createPlayerRes);
         }
+    }
+
+    private async Task<bool> CheckValidUserToken(int accountDbId, int userToken)
+    {
+        var redis = new RedisDictionary<int, int>(RedisInfo.Connection, "UserToken", TimeSpan.FromSeconds(10));
+        var redisUserToken = await redis.GetAndDeleteAsync(accountDbId);
+        if (redisUserToken.HasValue == false)
+            return false;
+
+        return redisUserToken.Value == userToken;
     }
 }

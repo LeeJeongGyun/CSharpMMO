@@ -60,8 +60,15 @@ public class UI_LoginScene : UI_Popup
 
             if (res.Result)
             {
-                Managers.Scene.LoadScene(Define.Scene.Game);
-                Managers.Network.ConnectToGameServer();
+                LoginScene loginScene = Managers.Scene.CurrentScene as LoginScene;
+                if (loginScene != null)
+                    loginScene.UiLoginScene.SetActive(false);
+
+                Managers.Network.AccountDbId = res.AccountDbId;
+                Managers.Network.UserToken = res.UserToken;
+
+                UI_SelectServerPopup component = Managers.UI.ShowPopupUI<UI_SelectServerPopup>();
+                component.SetServerInfos(res.ServerInfos);
             }
         });
     }

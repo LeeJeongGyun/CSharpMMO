@@ -10,7 +10,7 @@ internal class Program
 
     private static void Main(string[] args)
     {
-        Thread.Sleep(7000);
+        Thread.Sleep(3000);
 
         // 소켓 생성
         string hostName = Dns.GetHostName();
@@ -19,10 +19,10 @@ internal class Program
 
         Connector connector = new Connector(() => SessionManager.Instacne.Add());
 
-        for (int i = 0; i < 2; ++i)
+        for (int i = 0; i < 3; ++i)
         {
             connector.Connect(endPoint, _dummyCount);
-            Thread.Sleep(1000);
+            Thread.Sleep(2000);
         }
 
         while (true)

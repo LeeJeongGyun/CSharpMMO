@@ -5,17 +5,17 @@ using UnityEngine.EventSystems;
 
 public class LoginScene : BaseScene
 {
-    public override void Clear()
-    {
-    }
+    public GameObject UiLoginScene { get; private set; }
+
+    public override void Clear() => Managers.Resource.Destroy(UiLoginScene);
 
     protected override void Init()
     {
         base.Init();
         SceneType = Define.Scene.Login;
 
-        GameObject loginMenu = GameObject.Find("UI_LoginScene");
-        if (loginMenu == null)
-            Managers.UI.ShowPopupUI<UI_LoginScene>();
+        UiLoginScene = GameObject.Find("UI_LoginScene");
+        if (UiLoginScene == null)
+            UiLoginScene = Managers.UI.ShowPopupUI<UI_LoginScene>().gameObject;
     }
 }
