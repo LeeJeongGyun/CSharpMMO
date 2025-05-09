@@ -88,7 +88,7 @@ public class Monster : GameObject
         if (Room == null)
             return;
 
-        _target = Room.FindPlayer(p =>
+        _target = Room.FindPlayer(CellPos, p =>
         {
             Vector2Int dir = p.CellPos - CellPos;
             if (dir.cellDistance > _searchDistance)

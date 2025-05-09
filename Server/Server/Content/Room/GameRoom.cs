@@ -229,9 +229,10 @@ public partial class GameRoom : JobSerializer
         return player;
     }
 
-    public Player? FindPlayer(Func<GameObject, bool> condition)
+    public Player? FindPlayer(Vector2Int cellPos, Func<GameObject, bool> condition)
     {
-        foreach (var player in _players.Values)
+        List<Zone> zones = GetAdjacentZone(cellPos);
+        foreach (var player in zones.SelectMany(z => z.Players))
         {
             if (condition.Invoke(player))
                 return player;
