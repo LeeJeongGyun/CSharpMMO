@@ -102,31 +102,6 @@ public partial class GameRoom : JobSerializer
             enterRoomPacket.ObjectInfo = gameObject.Info;
             gameObject.Session.Send(enterRoomPacket);
 
-            // Zone에 있는 Objct 정보 player에게 송신
-            List<Zone> zones = GetAdjacentZone(player.CellPos);
-
-            S2C_Spawn spawnPacket = new S2C_Spawn();
-            foreach (Player p in zones.SelectMany(zone => zone.Players))
-            {
-                spawnPacket.ObjectInfos.Add(p.Info);
-                player.Vision._prevObjects.Add(p);
-            }
-
-            foreach (Monster m in zones.SelectMany(zone => zone.Monsters))
-            {
-                spawnPacket.ObjectInfos.Add(m.Info);
-                player.Vision._prevObjects.Add(m);
-            }
-
-            foreach (Projectile pj in zones.SelectMany(zone => zone.Projectiles))
-            {
-                spawnPacket.ObjectInfos.Add(pj.Info);
-                player.Vision._prevObjects.Add(pj);
-            }
-
-            if (spawnPacket.ObjectInfos.Count > 0)
-                player.Session.Send(spawnPacket);
-
             player.Vision.Update();
         }
         else if (gameObject.ObjectType == ObjectType.Monster)
