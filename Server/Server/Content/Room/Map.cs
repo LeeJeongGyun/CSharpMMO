@@ -219,11 +219,6 @@ public class Map
         // (y, x) 가는 길을 한 번이라도 발견했는지
         // 발견X => MaxValue
         // 발견O => F = G + H
-        //int[,] open = new int[SizeY, SizeX]; // OpenList
-        //for (int y = 0; y < SizeY; y++)
-        //    for (int x = 0; x < SizeX; x++)
-        //        open[y, x] = Int32.MaxValue;
-
         var openList = new Dictionary<Pos, int>(); // OpenList
 
         var parent = new Dictionary<Pos, Pos>();
@@ -281,7 +276,7 @@ public class Map
                     continue;
 
                 // 비용 계산
-                int g = 0;// node.G + _cost[i];
+                int g = node.G + _cost[i];
                 int h = 10 * ((dest.Y - next.Y) * (dest.Y - next.Y) + (dest.X - next.X) * (dest.X - next.X));
 
                 // 다른 경로에서 더 빠른 길 이미 찾았으면 스킵

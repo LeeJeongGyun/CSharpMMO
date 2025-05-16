@@ -37,7 +37,8 @@ namespace ServerCore
                     break;
 
                 // Performance Log
-                Interlocked.Increment(ref PerformanceProfiler.Instance.prevRecvCount);
+                //Interlocked.Increment(ref PerformanceProfiler.Instance.prevRecvCount);
+                Interlocked.Add(ref PerformanceProfiler.Instance.prevRecvCount, size);
 
                 OnPacketRecv(buffer.Slice(processLen, size));
                 processLen += size;
@@ -268,9 +269,13 @@ namespace ServerCore
             List<ArraySegment<byte>> sendBufferList = new List<ArraySegment<byte>>();
             lock (_lockObj)
             {
-                PerformanceProfiler.Instance.prevSendCount += _sendQueue.Count;
                 while (_sendQueue.Count > 0)
-                    sendBufferList.Add(_sendQueue.Dequeue());
+                {
+                    // Performance Log
+                    ArraySegment<byte> _sendBuffer = _sendQueue.Dequeue();
+                    PerformanceProfiler.Instance.prevSendCount += _sendBuffer.Count;
+                    sendBufferList.Add(_sendBuffer);
+                }
             }
 
             _sendArgs.BufferList = sendBufferList;
