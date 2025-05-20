@@ -133,16 +133,6 @@ public partial class GameRoom : JobSerializer
             // Projectile AI 등록
             projectile.Update();
         }
-
-        // 상대방에게 내 정보 송신
-        {
-            var spawnPacket = new S2C_Spawn();
-            spawnPacket.ObjectInfos.Add(gameObject.Info);
-            if (gameObject.ObjectType == ObjectType.Player)
-                BroadcastMessage(gameObject.CellPos, spawnPacket, excludeId: objectId);
-            else
-                BroadcastMessage(gameObject.CellPos, spawnPacket);
-        }
     }
 
     public void LeaveRoom(ObjectType type, int objectId)
@@ -154,7 +144,6 @@ public partial class GameRoom : JobSerializer
             return;
         }
 
-        Vector2Int? curCellPos = null;
         if (type == ObjectType.Player)
         {
             Player? player = null;
@@ -162,9 +151,6 @@ public partial class GameRoom : JobSerializer
 
             if (player == null)
                 return;
-
-            // Broadcasting을 위한 현재 cellPos 설정
-            curCellPos = player.CellPos;
 
             // 1. 나에게 퇴장 정보 송신
             var leavePacket = new S2C_LeaveRoom();
@@ -176,8 +162,8 @@ public partial class GameRoom : JobSerializer
             _players.Remove(objectId);
 
             // Zone에서 제거
-            Zone myZone = GetZone(player.CellPos);
-            myZone.Players.Remove(player);
+            Zone? myZone = GetZone(player.CellPos);
+            myZone?.Players.Remove(player);
 
             // 맵에서 제거
             _map.RemoveObject(player);
@@ -189,15 +175,12 @@ public partial class GameRoom : JobSerializer
             if (monster == null)
                 return;
 
-            // Broadcasting을 위한 현재 cellPos 설정
-            curCellPos = monster.CellPos;
-
             monster.Room = null;
             _monsters.Remove(objectId);
 
             // Zone에서 제거
-            Zone myZone = GetZone(monster.CellPos);
-            myZone.Monsters.Remove(monster);
+            Zone? myZone = GetZone(monster.CellPos);
+            myZone?.Monsters.Remove(monster);
 
             // 맵에서 제거
             _map.RemoveObject(monster);
@@ -206,21 +189,13 @@ public partial class GameRoom : JobSerializer
         {
             if (_projectiles.TryGetValue(objectId, out Projectile? projectile))
             {
-                // Broadcasting을 위한 현재 cellPos 설정
-                curCellPos = projectile.CellPos;
-
                 _projectiles.Remove(objectId);
 
                 // Zone에서 제거
-                Zone myZone = GetZone(projectile.CellPos);
-                myZone.Projectiles.Remove(projectile);
+                Zone? myZone = GetZone(projectile.CellPos);
+                myZone?.Projectiles.Remove(projectile);
             }
         }
-
-        // 2. 상대방에게 내 퇴장 정보 전달
-        var despawnPacket = new S2C_Despawn();
-        despawnPacket.ObjectIds.Add(objectId);
-        BroadcastMessage(curCellPos!.Value, despawnPacket);
     }
 
     public Player? FindPlayer(int playerId)
