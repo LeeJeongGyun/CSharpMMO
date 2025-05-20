@@ -15,21 +15,24 @@ public class Bullet : Projectile
             return;
 
         Vector2Int curCellPos = CellPos;
-        CellPos = GetFrontCellPos();
+        Vector2Int frontCellPos = GetFrontCellPos();
 
-        if (Room.Map.FindCollision(CellPos))
+        if (Room.Map.FindCollision(frontCellPos))
         {
             Room.Push(Room.LeaveRoom, ObjectType.Projectile, ObjectId);
             return;
         }
 
-        GameObject? target = Room.Map.FindObject(CellPos);
+        GameObject? target = Room.Map.FindObject(frontCellPos);
         if (target != null)
         {
             target.OnDamaged(Owner, SkillData.damage);
             Room.Push(Room.LeaveRoom, ObjectType.Projectile, ObjectId);
             return;
         }
+
+        // 좌표 갱신
+        CellPos = frontCellPos;
 
         // Zone 처리
         Zone curZone = Room.GetZone(curCellPos);
